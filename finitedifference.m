@@ -16,8 +16,9 @@ L = D/abs(J);
 tmin = 0; tmax = 10;
 xmin = 0; xmax = 160;
 
-n = 8001;  % discretization of time
-m = 641;  % discretization of space
+n = 20;  % discretization of time
+m = 201;  % discretization of space
+
 
 t = linspace(tmin,tmax,n);
 % a = linspace(xmin,xmax,m);  l = linspace(xmin,xmax,m);
@@ -33,7 +34,7 @@ beta1   = fcat*dt;  beta2   = fres*dt;
 %% initial condition
 p0 = zeros(m,m);
 q0 = zeros(m,m);
-for i = 1:m;
+for i = 1:m
 %     if abs(x(i)) <= 1
 %         p0(i,1) = (1-abs(x(i)))*dx;
 %     end
@@ -44,7 +45,7 @@ for i = 1:m;
     end
 end
 
-%% FTFS-FTBS scheme
+%% specify transition matrices
 
 % prepare sparse diagonal and band matrices
 pp    = sparse(1:m  ,1:m  ,ones(m  ,1),2*m,2*m);
@@ -70,11 +71,17 @@ A = A + (1+alpha1-beta1)*pp - alpha1*pp_up;
 A = A + beta2*pq + beta1*qp;
 A = A + (1+alpha2-beta2)*qq - alpha2*qq_lo;
 
+A_test = sparse(2*m,2*m);
+A_test = A + (1+5*dt/dx)*pp - 5*dt/dx*pp_up;
+
 M_switch = sparse(2*m,2*m);
 M_switch = M_switch + (1-beta1)*pp + beta2*pq + (1-beta2)*qq + beta1*qp;
 
 M_advect = sparse(2*m,2*m);
-M_advect = M_advect + (1+alpha1)*pp - alpha1*pp_up + (1+alpha2)*qq - alpha2*qq_lo;
+% M_advect = M_advect + (1+alpha1)*pp - alpha1*pp_up + (1+alpha2)*qq - alpha2*qq_lo;  % FTFS-FTBS scheme
+M_advect = M_advect + (1-alpha1^2)*pp + (-alpha1+alpha1^2)/2*pp_up + (alpha1+alpha1^2)/2*pp_lo;
+M_advect = M_advect + (1-alpha2^2)*qq + (alpha2+alpha2^2)/2*qq_up + (-alpha2+alpha2^2)/2*qq_lo;
+
 
 clear pp pp_up pp_lo pq pq_up pq_lo qp qp_up qp_lo qq qq_up qq_lo;
 
@@ -89,14 +96,17 @@ u(:,:,1) = [p0; q0];      % initialize solution 2m-by-n matrix
 
 tic;
 tot = zeros(1,n);
-for j = 1:2000
+for j = 1:n
     
-    % step 1: switching update
-    u(:,:,2) = M_switch*u(:,:,1);
-    
-    % step 2: 1d advection update
-    u(:,:,3) = M_advect*u(:,:,2);
-    
+%     % step 1: switching update
+%     u(:,:,2) = M_switch*u(:,:,1);
+%     
+%     % step 2: 1d advection update
+% %     u(:,:,3) = M_advect*u(:,:,2);
+%     u(:,:,3) = u(:,:,2);
+
+    u(:,:,3) = M_advect*u(:,:,1);
+
     % boundary conditions
 %     u(1  ,new) = 0;     % conc = 0 at left
 %     u(1+m,new) = 0;     % conc = 0 at left
@@ -109,12 +119,20 @@ for j = 1:2000
     
     tot(j) = sum(sum(u(:,:,3)));
     
-    u(:,:,1) = u (:,:,3);
-    
-%     if mod(j,100) == 1
-%         figure(1); hold on
-%         plot(x, u(1:m,1,3))
+%     % stop simulation if negative values are too large
+%     if min(u(1:m,1,3)) < -0.1*100;
+%         min(u(1:m,1,3))
+%         j
+%         plot(x,u(1:m,1,3),x,u(m+1:2*m,1,3))
+%         stop
 %     end
+    
+    u(:,:,1) = u(:,:,3);
+    
+    if mod(j,10) == 1
+        figure(1); hold on
+        plot(x, u(1:m,1,3))
+    end
     
 end
 
@@ -148,10 +166,10 @@ toc
 
 p_final = u(1:m,1,3);
 q_final = u(m+1:2*m,1,3);
-
-figure(1)
-% subplot(2,1,1)
-plot(x,p_final,x,q_final)
+% 
+% figure(1)
+% % subplot(2,1,1)
+% plot(x,p_final,x,q_final)
 
 stop
 
