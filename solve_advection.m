@@ -6,11 +6,11 @@ fcat = 0.3; % catastrophe
 fres = 0.1; % rescue
 % fcat = 0; % catastrophe
 % fres = 0; % rescue
-cap = 1;
+cap = 100;
 
-dim = 2; % dimension of system
+dim = 1; % dimension of system
 
-r = 0.2; % nucleation rate
+r = 0; % nucleation rate
 % r = 0; % nucleation rate
 
 J = (v1*fres - v2*fcat)/(fcat+fres)
@@ -45,11 +45,9 @@ pflux = zeros(m,1);
 %         p0(i) = 1;
 %     end
 % end
-for i = 1:m;
-    if (x(i)<= 2 && x(i)>=0.1)
-        pflux(i) = 0.1;
-    end
-end
+
+a = v1*dt/dx; a = fix(a);
+pflux(1:a) = 50*ones(a,1);
  
 % for i = 1:m;
 %     if (x(i)>=40)&(x(i)<=60)
@@ -129,8 +127,10 @@ for j = 1:n
     q_old = q;
         
     if mod(j,5/dt) == 1
-        sump = [sump smooth(p,100)];
-        sumq = [sumq smooth(q,100)];
+%         sump = [sump smooth(p,100)];
+%         sumq = [sumq smooth(q,100)];
+        sump = [sump p];
+        sumq = [sumq q];
         tpoints = [tpoints j*dt];
     end
     
@@ -147,7 +147,7 @@ plot(x, sump)
 axis([0 xmax 0 yaxismax])
 % plot(x, cap*ones(length(x),1))
 % sum(sump+sumq)
-
-figure;
-plot(x,sump.*repmat(x',1,length(tpoints)))
+ 
+% figure;
+% plot(x,sump.*repmat(x',1,length(tpoints)))
 
