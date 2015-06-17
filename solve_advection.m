@@ -30,7 +30,8 @@ tmin = 0; tmax = 30;
 xmin = 1; xmax = 800;
 
 dt = 0.05; % discretization of time
-dx = v1*dt/100;
+% dx = v1*dt/100;
+dx = gcd(v1,v2)*dt;
 
 t = tmin:dt:tmax; n = length(t);
 x = xmin:dx:xmax; m = length(x);
@@ -46,7 +47,8 @@ pflux = zeros(m,1);
 %     end
 % end
 
-a = v1*dt/dx; a = fix(a);
+% a = v1*dt/dx; a = fix(a);
+a = v1*dt/dx; 
 pflux(1:a) = 50*ones(a,1);
  
 % for i = 1:m;
@@ -75,12 +77,15 @@ pflux(1:a) = 50*ones(a,1);
 
 p_old = p0; q_old = q0;
 
-a = v1*dt/dx; a = fix(a);
-b = v2*dt/dx; b = fix(b); % rounds toward zero
+% a = v1*dt/dx; a = fix(a);
+% b = v2*dt/dx; b = fix(b); % rounds toward zero
+a = v1*dt/dx; 
+b = v2*dt/dx; 
 
 sump = p0;
 sumq = q0;
 tpoints = [0];
+tic;
 for j = 1:n
     
     initial = sum(p_old+q_old);
@@ -127,15 +132,13 @@ for j = 1:n
     q_old = q;
         
     if mod(j,5/dt) == 1
-%         sump = [sump smooth(p,100)];
-%         sumq = [sumq smooth(q,100)];
         sump = [sump p];
         sumq = [sumq q];
         tpoints = [tpoints j*dt];
     end
     
 end
-
+toc
 % figure(1); hold on;
 % plot(x,p,x,q)
 % legend('p0', 'q0', 'p', 'q')
