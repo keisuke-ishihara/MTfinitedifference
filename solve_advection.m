@@ -1,22 +1,30 @@
 clear all; close all;
 
-v1   = 25;  % polymerization
-v2   = 15;  % depolymerization
-fcat = 0.3; % catastrophe
-fres = 0.1; % rescue
-% fcat = 0; % catastrophe
-% fres = 0; % rescue
-cap = 100;
+v1   = 20;  % polymerization
+v2   = 19;  % depolymerization
+fcat = 6; % catastrophe
+fres = 1; % rescue
+cap = 2;  % carrying capacity
 
 dim = 1; % dimension of system
 
-r = 0; % nucleation rate
-% r = 0; % nucleation rate
+r = 5; % nucleation rate
 
 J = (v1*fres - v2*fcat)/(fcat+fres)
 D = v1*v2/(fcat+fres);
 tau =4*D/J^2;
 L = D/abs(J);
+
+tmin = 0; tmax = 30;
+xmin = 1; xmax = 800;
+
+dt = 0.05/max([r fcat fres]); % discretization of time
+dx = gcd(v1,v2)*dt;
+
+t = tmin:dt:tmax; n = length(t);
+x = xmin:dx:xmax; m = length(x);
+
+%% calculations based on analytical solutions
 
 r_critical = (sqrt(fcat)-sqrt(v1/v2*fres))^2
 
@@ -25,27 +33,16 @@ k_curr = ((fp_curr+fm-r_curr)*sqrt(r_curr*fp_curr)+r_curr*(-fp_curr+fm+r_curr))/
 s_curr = (2*r_curr*fm)/(fp_curr+fm-r_curr)-k_curr*(vm*fp_curr-vp*fm-r_curr*vm)/(fp_curr+fm-r_curr);
 v_theoretical = s_curr/k_curr
 
-
-tmin = 0; tmax = 30;
-xmin = 1; xmax = 800;
-
-dt = 0.05; % discretization of time
-% dx = v1*dt/100;
-dx = gcd(v1,v2)*dt;
-
-t = tmin:dt:tmax; n = length(t);
-x = xmin:dx:xmax; m = length(x);
-
 %% initial condition
 p0 = zeros(m,1);
 q0 = zeros(m,1);
 pflux = zeros(m,1);
 
-% for i = 1:m;
-%     if (x(i)<=10 && x(i)>=0.1)
-%         p0(i) = 1;
-%     end
-% end
+for i = 1:m;
+    if (x(i)<=10 && x(i)>=0.1)
+        p0(i) = 1;
+    end
+end
 
 % a = v1*dt/dx; a = fix(a);
 a = v1*dt/dx; 
@@ -90,22 +87,19 @@ for j = 1:n
     
     initial = sum(p_old+q_old);
 
-    % translation by advection     
-%     p = [zeros(a,1); p_old(1:(m-a))];
-%     q = [q_old((b+1):m); zeros(b,1)];
+%     translation by advection     
+    p = [zeros(a,1); p_old(1:(m-a))];
+    q = [q_old((b+1):m); zeros(b,1)];
 
-
-    % translation by advection with radial geometry
-    p_old_r = p_old.*((x./(x+v1*dt)).^(dim-1))';
-    p = [zeros(a,1); p_old_r(1:(m-a))];
+%     % translation by advection with radial geometry
+%     p_old_r = p_old.*((x./(x+v1*dt)).^(dim-1))';
+%     p = [zeros(a,1); p_old_r(1:(m-a))];
+%     q_old_r = q_old.*((x./(x-v2*dt)).^(dim-1))';
+%     q = [q_old_r((b+1):m); zeros(b,1)];
     
-    q_old_r = q_old.*((x./(x-v2*dt)).^(dim-1))';
-    q = [q_old_r((b+1):m); zeros(b,1)];
-    
-    % constant influx at boundary
-    p = p+pflux;  
-    
-  
+%     % constant influx at boundary
+%     p = p+pflux;  
+      
 %     % reflecting boundary condition
 %     reflect = flip([zeros(m-b,1); q_old(1:b)]);
 %     p = p + reflect;
@@ -116,22 +110,27 @@ for j = 1:n
     p = p+dp;
     q = q+dq;
     
-    % nucleation of growing plus ends  
-    nuc = r*p.*(1-p/cap)*dt; 
+%     % nucleation of growing plus ends  
+%     nuc = r*p.*(1-p/cap)*dt;
     
-%     if j == n
-%         figure; plot(x,p)
-%         figure; plot(x, nuc)
-%     end
+    % nucleation of growing plus ends, radial geometry
+    if dim == 1
+        p_norm = p;
+    elseif dim == 2
+        p_norm = p./(2*pi*x/dx)';
+    else
+        stop
+    end 
+    nuc = r*p_norm.*(1-p/cap)*dt; 
     
-%     nuc(nuc(:)<0) = 0;
-    
+    nuc(nuc(:)<0) = 0;
     p = p + nuc;    
   
     p_old = p;
     q_old = q;
-        
-    if mod(j,5/dt) == 1
+    
+    % choose time points to display results
+    if mod(j,tmax/dt/30) == 1
         sump = [sump p];
         sumq = [sumq q];
         tpoints = [tpoints j*dt];
@@ -146,8 +145,9 @@ toc
 yaxismax = max(max(sump(fix(40/dx):end,:)));
 
 figure; hold on;
-plot(x, sump)
-axis([0 xmax 0 yaxismax])
+% plot(x, sump)
+semilogy(x,sump)
+axis([0 tmax*v_theoretical+30 10^(-6) cap])
 % plot(x, cap*ones(length(x),1))
 % sum(sump+sumq)
  
