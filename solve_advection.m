@@ -1,22 +1,39 @@
-clear all; close all;
+function [x, tpoints, sump] = solve_advection(v1,v2,fcat,fres,r,dim)
+% simulates 1D advection PDE based on the non-standard method of translation
 
-v1   = 20;  % polymerization
-v2   = 19;  % depolymerization
-fcat = 6; % catastrophe
-fres = 1; % rescue
-cap = 2;  % carrying capacity
+% clear all; close all;
 
-dim = 1; % dimension of system
+% v1   = 20;  % polymerization
+% v2   = 16;  % depolymerization
+% fcat = 3; % catastrophe
+% fres = 1; % rescue
+% r = 100; % nucleation rate
+% 
+% dim = 1;  % dimension of system
 
-r = 5; % nucleation rate
+cap = 1;  % carrying capacity
 
-J = (v1*fres - v2*fcat)/(fcat+fres)
-D = v1*v2/(fcat+fres);
-tau =4*D/J^2;
-L = D/abs(J);
+%% calculations based on analytical solutions
 
-tmin = 0; tmax = 30;
-xmin = 1; xmax = 800;
+r_critical = (sqrt(fcat)-sqrt(v1/v2*fres))^2
+fp_curr = fcat; fm = fres; r_curr = r; vp = v1; vm = v2;
+k_curr = ((fp_curr+fm-r_curr)*sqrt(r_curr*fp_curr)+r_curr*(-fp_curr+fm+r_curr))/(vp+vm)/(fp_curr-r_curr);
+s_curr = (2*r_curr*fm)/(fp_curr+fm-r_curr)-k_curr*(vm*fp_curr-vp*fm-r_curr*vm)/(fp_curr+fm-r_curr);
+v_theoretical = s_curr/k_curr
+
+%% decide on simulation time and length scales
+
+tmin = 0; tmax = 50;
+% this increases simulation time as r approaches r_c
+if r < 5*r_critical
+    tmax = tmax+(ceil(1/(r-r_critical)))^2
+end
+xmin = 1;
+xmax = tmax*min(v_theoretical, v1)+200;
+% this ensures proper xmax choice for r < r_c
+if v_theoretical < 0
+    xmax = 200;
+end
 
 dt = 0.05/max([r fcat fres]); % discretization of time
 dx = gcd(v1,v2)*dt;
@@ -24,29 +41,20 @@ dx = gcd(v1,v2)*dt;
 t = tmin:dt:tmax; n = length(t);
 x = xmin:dx:xmax; m = length(x);
 
-%% calculations based on analytical solutions
-
-r_critical = (sqrt(fcat)-sqrt(v1/v2*fres))^2
-
-fp_curr = fcat; fm = fres; r_curr = r; vp = v1; vm = v2;
-k_curr = ((fp_curr+fm-r_curr)*sqrt(r_curr*fp_curr)+r_curr*(-fp_curr+fm+r_curr))/(vp+vm)/(fp_curr-r_curr);
-s_curr = (2*r_curr*fm)/(fp_curr+fm-r_curr)-k_curr*(vm*fp_curr-vp*fm-r_curr*vm)/(fp_curr+fm-r_curr);
-v_theoretical = s_curr/k_curr
-
 %% initial condition
 p0 = zeros(m,1);
 q0 = zeros(m,1);
 pflux = zeros(m,1);
 
 for i = 1:m;
-    if (x(i)<=10 && x(i)>=0.1)
-        p0(i) = 1;
+    if (x(i)<=100 && x(i)>=0.1)
+        p0(i) = cap;
     end
 end
 
-% a = v1*dt/dx; a = fix(a);
-a = v1*dt/dx; 
-pflux(1:a) = 50*ones(a,1);
+% % a = v1*dt/dx; a = fix(a);
+% a = v1*dt/dx; 
+% pflux(1:a) = 50*ones(a,1);
  
 % for i = 1:m;
 %     if (x(i)>=40)&(x(i)<=60)
@@ -68,8 +76,7 @@ pflux(1:a) = 50*ones(a,1);
 %         q0(i,1) = 2.5*(x(i)-40);
 %     end
 % end
-
-
+ 
 %% solve time evolution
 
 p_old = p0; q_old = q0;
@@ -79,9 +86,7 @@ p_old = p0; q_old = q0;
 a = v1*dt/dx; 
 b = v2*dt/dx; 
 
-sump = p0;
-sumq = q0;
-tpoints = [0];
+sump = p0; sumq = q0; tpoints = [0];
 tic;
 for j = 1:n
     
@@ -90,12 +95,6 @@ for j = 1:n
 %     translation by advection     
     p = [zeros(a,1); p_old(1:(m-a))];
     q = [q_old((b+1):m); zeros(b,1)];
-
-%     % translation by advection with radial geometry
-%     p_old_r = p_old.*((x./(x+v1*dt)).^(dim-1))';
-%     p = [zeros(a,1); p_old_r(1:(m-a))];
-%     q_old_r = q_old.*((x./(x-v2*dt)).^(dim-1))';
-%     q = [q_old_r((b+1):m); zeros(b,1)];
     
 %     % constant influx at boundary
 %     p = p+pflux;  
@@ -109,9 +108,6 @@ for j = 1:n
     dq = +fcat*p*dt-fres*q*dt;
     p = p+dp;
     q = q+dq;
-    
-%     % nucleation of growing plus ends  
-%     nuc = r*p.*(1-p/cap)*dt;
     
     % nucleation of growing plus ends, radial geometry
     if dim == 1
@@ -130,7 +126,7 @@ for j = 1:n
     q_old = q;
     
     % choose time points to display results
-    if mod(j,tmax/dt/30) == 1
+    if mod(j,floor(n/20)) == 0
         sump = [sump p];
         sumq = [sumq q];
         tpoints = [tpoints j*dt];
@@ -138,19 +134,9 @@ for j = 1:n
     
 end
 toc
-% figure(1); hold on;
-% plot(x,p,x,q)
-% legend('p0', 'q0', 'p', 'q')
 
-yaxismax = max(max(sump(fix(40/dx):end,:)));
-
-figure; hold on;
+% figure; hold on;
 % plot(x, sump)
-semilogy(x,sump)
-axis([0 tmax*v_theoretical+30 10^(-6) cap])
-% plot(x, cap*ones(length(x),1))
-% sum(sump+sumq)
- 
-% figure;
-% plot(x,sump.*repmat(x',1,length(tpoints)))
+
+end
 
