@@ -6,7 +6,8 @@ n = 10;
 t = tpoints(end-n+1:end);
 p = sump(:,end-n+1:end);
 
-% largest decrease method
+% % largest decrease method
+
 pos = []; val = [];
 for i = 1:length(t)
     pnow = p(:,i);
@@ -15,11 +16,14 @@ for i = 1:length(t)
     val = [val pnow(I)];
 end
 
-% % half max method
+% half max method
+
 % pos = []; val = [];
 % for i = 1:length(t)
 %     pnow = p(:,i);
 %     hm = 0.5*max(pnow);
+%     [M Imax] = max(pnow);
+%     pnow(1:Imax) = zeros(1,Imax); 
 %     [M I] = min(abs(pnow-hm));
 %     pos = [pos x(I)];
 %     val = [val pnow(I)];

@@ -26,7 +26,7 @@ v_theoretical = s_curr/k_curr
 tmin = 0; tmax = 50;
 % this increases simulation time as r approaches r_c
 if r < 5*r_critical
-    tmax = tmax+(ceil(1/(r-r_critical)))^2
+    tmax = tmax+(ceil(1/(r-r_critical)))^2;
 end
 xmin = 1;
 xmax = tmax*min(v_theoretical, v1)+200;
@@ -133,7 +133,7 @@ for j = 1:n
     end
     
 end
-toc
+% toc;
 
 % figure; hold on;
 % plot(x, sump)
