@@ -1,4 +1,4 @@
-function [x, tpoints, sump] = solve_advection(v1,v2,fcat,fres,r,dim)
+function [x, tpoints, sump, r_critical, v_theoretical] = solve_advection(v1,v2,fcat,fres,r,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
 
 % clear all; close all;
@@ -15,11 +15,11 @@ cap = 1;  % carrying capacity
 
 %% calculations based on analytical solutions
 
-r_critical = (sqrt(fcat)-sqrt(v1/v2*fres))^2
+r_critical = (sqrt(fcat)-sqrt(v1/v2*fres))^2;
 fp_curr = fcat; fm = fres; r_curr = r; vp = v1; vm = v2;
 k_curr = ((fp_curr+fm-r_curr)*sqrt(r_curr*fp_curr)+r_curr*(-fp_curr+fm+r_curr))/(vp+vm)/(fp_curr-r_curr);
 s_curr = (2*r_curr*fm)/(fp_curr+fm-r_curr)-k_curr*(vm*fp_curr-vp*fm-r_curr*vm)/(fp_curr+fm-r_curr);
-v_theoretical = s_curr/k_curr
+v_theoretical = s_curr/k_curr;
 
 %% decide on simulation time and length scales
 

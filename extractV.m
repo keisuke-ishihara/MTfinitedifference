@@ -7,27 +7,27 @@ t = tpoints(end-n+1:end);
 p = sump(:,end-n+1:end);
 
 % % largest decrease method
+% 
+% pos = []; val = [];
+% for i = 1:length(t)
+%     pnow = p(:,i);
+%     [M I] = max(-diff(pnow'));
+%     pos = [pos x(I)];
+%     val = [val pnow(I)];
+% end
+
+% half max method
 
 pos = []; val = [];
 for i = 1:length(t)
     pnow = p(:,i);
-    [M I] = max(-diff(pnow'));
+    hm = 0.5*max(pnow);
+    [M Imax] = max(pnow);
+    pnow(1:Imax) = zeros(1,Imax); 
+    [M I] = min(abs(pnow-hm));
     pos = [pos x(I)];
     val = [val pnow(I)];
 end
-
-% half max method
-
-% pos = []; val = [];
-% for i = 1:length(t)
-%     pnow = p(:,i);
-%     hm = 0.5*max(pnow);
-%     [M Imax] = max(pnow);
-%     pnow(1:Imax) = zeros(1,Imax); 
-%     [M I] = min(abs(pnow-hm));
-%     pos = [pos x(I)];
-%     val = [val pnow(I)];
-% end
 
 % % loglog method
 % pos = []; val = [];
@@ -48,12 +48,12 @@ end
 %     plot(x(I),pnow(I),'r*');
 % end
 
-figure; hold on;
+figure(2); hold on;
 plot(x, p)
 plot(pos, val, 'r*' )
 
 PS = polyfit(t,pos,1);
-figure; hold on;
+figure(3); hold on;
 plot(t,pos, 'k*')
 plot(t,t*PS(1)+PS(2),'r')
 
