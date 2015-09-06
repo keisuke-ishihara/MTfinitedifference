@@ -1,4 +1,4 @@
-function [ velocity ] = extractV(x, tpoints, sump)
+function [velocity ] = extractV(x, tpoints, sump)
 %EXTRACTV
 % calculates the velocity of the expansion from simulation curves
 
@@ -49,7 +49,7 @@ end
 % end
 
 figure(2); hold on;
-plot(x, p)
+plot(x, p(:,end/2:end))
 plot(pos, val, 'r*' )
 
 PS = polyfit(t,pos,1);
@@ -58,7 +58,6 @@ plot(t,pos, 'k*')
 plot(t,t*PS(1)+PS(2),'r')
 
 velocity = PS(1);
-
 
 end
 

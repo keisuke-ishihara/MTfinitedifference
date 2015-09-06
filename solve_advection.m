@@ -16,16 +16,17 @@ cap = 1;  % carrying capacity
 %% decide on simulation time and length scales
 
 tmin = 0; tmax = 50;
+% tmax 50 implies that the minimal nuc rate considered is 0.02 [1/min]
+
 % this increases simulation time as r approaches r_c
-if r < 5*r_critical
+if r < fcat
     tmax = tmax+(ceil(1/(r-r_critical)))^2;
+%     tmax = tmax+0.1*abs((ceil(1/(r-r_critical)))^3);
 end
+tmax
+
 xmin = 1;
 xmax = tmax*min(v_theoretical, v1)+200;
-% this ensures proper xmax choice for r < r_c
-if v_theoretical < 0
-    xmax = 200;
-end
 
 dt = 0.05/max([r fcat fres]); % discretization of time
 dx = gcd(v1,v2)*dt;
@@ -76,7 +77,7 @@ p_old = p0; q_old = q0;
 % a = v1*dt/dx; a = fix(a);
 % b = v2*dt/dx; b = fix(b); % rounds toward zero
 a = v1*dt/dx; 
-b = v2*dt/dx; 
+b = v2*dt/dx; b = fix(b); 
 
 sump = p0; sumq = q0; tpoints = [0];
 tic;
