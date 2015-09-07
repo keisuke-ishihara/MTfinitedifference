@@ -109,8 +109,9 @@ for j = 1:n
         p_norm = p./(2*pi*x/dx)';
     else
         stop
-    end 
-    nuc = r*p_norm.*(1-p/cap)*dt; 
+    end
+%     nuc = r*p_norm.*(1-p/cap)*dt; 
+    nuc = r*p.*(1-p_norm/cap)*dt; 
     
     nuc(nuc(:)<0) = 0;
     p = p + nuc;    

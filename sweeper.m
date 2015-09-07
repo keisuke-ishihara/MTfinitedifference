@@ -3,7 +3,7 @@ clear all; close all;
 v1   = 20;  % polymerization
 v2   = 30;  % depolymerization
 fcat = 2; % catastrophe
-fres = 1; % rescue
+fres = 1.2; % rescue
 % rs   = 0:0.1:2; % nucleation rate
 rs = 1;
 dim  = 1;  % dimension of system
@@ -16,7 +16,7 @@ for i = 1:length(rs)
     [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
     
     [x, tpoints, sump] = solve_advection(v1,v2,fcat,fres,r,dim,r_c,v_theor);
-    v_sim = extractV(x,tpoints,sump);
+    v_sim = extractV(x,tpoints,sump,dim);
  
 %     figure(1); hold on;
 %     plot(r,v_theor, 'bo')
@@ -26,5 +26,5 @@ for i = 1:length(rs)
 %     tic
 end
 
-figure(1);
-legend('theory','simulation')
+% figure(1);
+% legend('theory','simulation')

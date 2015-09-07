@@ -1,10 +1,22 @@
-function [velocity ] = extractV(x, tpoints, sump)
+function [velocity ] = extractV(x, tpoints, sump, dim)
 %EXTRACTV
 % calculates the velocity of the expansion from simulation curves
 
 n = 10;
 t = tpoints(end-n+1:end);
 p = sump(:,end-n+1:end);
+dx = x(2)-x(1);
+
+% normalize the number of plus ends with geometry
+if dim == 1
+    p_norm = p;
+elseif dim == 2
+    [a b] = size(p);
+    p_norm = p./(repmat(2*pi*x/dx,b,1))';
+else
+    error
+end
+p = p_norm;
 
 % % largest decrease method
 % 
@@ -49,7 +61,8 @@ end
 % end
 
 figure(2); hold on;
-plot(x, p(:,end/2:end))
+% plot(x, p(:,end/2:end))
+plot(x, p)
 plot(pos, val, 'r*' )
 
 PS = polyfit(t,pos,1);
