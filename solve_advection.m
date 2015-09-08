@@ -40,7 +40,7 @@ q0 = zeros(m,1);
 pflux = zeros(m,1);
 
 for i = 1:m;
-    if (x(i)<=100 && x(i)>=0.1)
+    if (x(i)<=50 && x(i)>=0.1)
         p0(i) = cap;
     end
 end

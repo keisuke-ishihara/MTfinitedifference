@@ -62,8 +62,10 @@ end
 
 figure(2); hold on;
 % plot(x, p(:,end/2:end))
-plot(x, p)
-plot(pos, val, 'r*' )
+% plot(x, p)
+% plot(pos, val, 'r*' )
+semilogx(x, p)
+semilogx(pos, val, 'r*' )
 
 PS = polyfit(t,pos,1);
 figure(3); hold on;
