@@ -1,4 +1,4 @@
-function [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim,r_critical,v_theoretical)
+function [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
 % only accounts for plus end
 %
@@ -8,6 +8,7 @@ function [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim,r_criti
 global v1 v2 fcat fres r dim
 global cap dt dx
 cap = 1;  % carrying capacity
+clc;
 
 %% decide on stepsizes of time and space
 
@@ -32,8 +33,8 @@ sump = p0; tpoints = 0;
 %% simulation
 
 % first simulation with pre-fixed time
-prefixedtime = 50;
-[x p q curr_time sump tpoints] = solver_plusonly(x p, q, curr_time, prefixedtime, sump, tpoints);
+prefixedtime = 50; p = p0; q = q0;
+[p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, prefixedtime, sump, tpoints);
 
 % assess similarity of the fronts
 vchange = similarity(x, sump); 

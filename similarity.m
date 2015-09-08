@@ -7,6 +7,8 @@ p1 = sump(:,end-2);
 p2 = sump(:,end-1);
 p3 = sump(:,end);
 
+dx = x(2)-x(1);
+
 % normalize the number of plus ends with geometry
 if dim == 1
 elseif dim == 2
@@ -18,6 +20,7 @@ else
     error
 end
 
+vchange =
 
 
 end

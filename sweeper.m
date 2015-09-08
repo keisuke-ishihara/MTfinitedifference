@@ -1,4 +1,4 @@
-clear all; close all;
+clear all; close all; clc;
 
 v1   = 20;  % polymerization
 v2   = 30;  % depolymerization
@@ -15,8 +15,9 @@ for i = 1:length(rs)
     
     [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
     
-    [x, tpoints, sump] = solve_advection(v1,v2,fcat,fres,r,dim,r_c,v_theor);
-%     [x, tpoints, sump] = adaptivesim_ponly(v1,v2,fcat,fres,r,dim,r_c,v_theor);
+%     [x, tpoints, sump] = solve_advection(v1,v2,fcat,fres,r,dim,r_c,v_theor);
+    [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
+%     [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
     v_sim = extractV(x,tpoints,sump,dim);
  
 %     figure(1); hold on;

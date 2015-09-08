@@ -1,4 +1,4 @@
-function [p q curr_time sump tpoints] = solver_plusonly(p, q, curr_time, moretime, sump, tpoints)
+function [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints)
 %SOLVER_PLUSONLY 
 %
 %   solve time evolution of the system, this only accounts for plus ends
@@ -8,14 +8,15 @@ global v1 v2 fcat fres r dim cap dt dx
 
 tmin = curr_time; tmax = curr_time+moretime;
 t = tmin:dt:tmax;
-% n = length(t);
+n = length(t);
+m = length(x);
 
 p_old = p; q_old = q;
 
 a = v1*dt/dx; 
 b = v2*dt/dx; b = fix(b); 
 
-for j = 1:length(time)
+for j = 1:n
     
     %  translation by advection     
     p = [zeros(a,1); p_old(1:(m-a))];
@@ -49,7 +50,7 @@ for j = 1:length(time)
     % choose time points to add to sump
     if mod(j,floor(n/20)) == 0
         sump = [sump p];
-        sumq = [sumq q];
+%         sumq = [sumq q];
         tpoints = [tpoints curr_time];
     end
     
