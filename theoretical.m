@@ -13,13 +13,13 @@ if J < 0
     
     if r > r_critical
         
-        if r <= fcat
+        if r < fcat
             fp_curr = fcat; fm = fres; r_curr = r; vp = v1; vm = v2;
             k_curr = ((fp_curr+fm-r_curr)*sqrt(r_curr*fp_curr)+r_curr*(-fp_curr+fm+r_curr))/(vp+vm)/(fp_curr-r_curr);
             s_curr = (2*r_curr*fm)/(fp_curr+fm-r_curr)-k_curr*(vm*fp_curr-vp*fm-r_curr*vm)/(fp_curr+fm-r_curr);
             v_theoretical = s_curr/k_curr;
         else
-            v_theoretical = v1; % when r > fcat
+            v_theoretical = v1; % when r >= fcat
         end
         
     else

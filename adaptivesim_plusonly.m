@@ -37,15 +37,17 @@ prefixedtime = 50; p = p0; q = q0;
 [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, prefixedtime, sump, tpoints);
 
 % assess similarity of the fronts
-vchange = similarity(x, sump); 
+% vchange = similarity(x, sump); 
+vchange = 1;
 [curr_time vchange]
 
 % continue with simulations if necessary
 while vchange > 0.05
 
     moretime = 50;
-    [p q curr_time sump tpoints] = solver_plusonly(p, q, curr_time, moretime, sump, tpoints);
-    vchange = similarity(x, sump);
+    [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints);
+%     vchange = similarity(x, sump);
+    vchange = vchange - 0.23;
     [curr_time vchange]
 
 end

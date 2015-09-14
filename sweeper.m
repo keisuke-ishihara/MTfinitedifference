@@ -6,7 +6,7 @@ fcat = 2; % catastrophe
 fres = 1.2; % rescue
 % rs   = 0:0.1:2; % nucleation rate
 rs = 2;
-dim  = 2;  % dimension of system
+dim  = 1;  % dimension of system
 
 tic
 for i = 1:length(rs) 
