@@ -5,7 +5,7 @@ v2   = 30;  % depolymerization
 fcat = 2; % catastrophe
 fres = 1.2; % rescue
 % rs   = 0:0.1:2; % nucleation rate
-rs = 1;
+rs = 1.5;
 dim  = 1;  % dimension of system
 
 tic

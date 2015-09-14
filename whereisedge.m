@@ -12,7 +12,7 @@ p(1:ind_max) = M*ones(ind_max, 1);
 % plot(x,p);
 
 % finds the point corresponding to 10% of the carrying capacity (=1) 
-dif = abs(p-cap*0.1*ones(length(p),1));
+dif = abs(p-cap*0.05*ones(length(p),1));
 [M_dif ind_dif] = min(dif);
 % plot(x(ind_dif), p(ind_dif),'r*')
 

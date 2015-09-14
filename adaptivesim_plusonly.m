@@ -12,12 +12,18 @@ clc;
 
 %% decide on stepsizes of time and space
 
+prefixedtime = 10;
+moretime = 30;
+
 dt = 0.05/max([r fcat fres]); % discretization of time
 dx = gcd(v1,v2)*dt;
 
-xmin = 1; xmax = 1000;
+[r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
+
+xmin = 1; xmax = 100+prefixedtime*v_theor*1.2;
 x_init = xmin:dx:xmax; m = length(x_init);
 x = x_init;
+
 
 %% initial condition
 
@@ -34,24 +40,43 @@ sump = p0; tpoints = 0;
 %% simulation
 
 % first simulation with pre-fixed time
-prefixedtime = 20; p = p0; q = q0;
+p = p0; q = q0;
 [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, prefixedtime, sump, tpoints);
 
 % assess similarity of the fronts
 % vchange = similarity(x, sump); 
 vchange = 1;
-[curr_time vchange]
+% [curr_time vchange]
 
 % continue with simulations if necessary
 while vchange > 0.05
 
-    moretime = 20;
-%     if edgepos 
-%     end
+    edgepos = whereisedge(x, p)
+    if edgepos > max(x)-v_theor*1.2*moretime;
+        
+        % extend x space
+        x = xmin:dx:(max(x)+v_theor*1.2*moretime);
+        newp = zeros(length(x),1);
+        
+        % extend the variables p,q,sump
+        newp(1:length(p)) = p;
+        p = newp;
+        
+        newq = zeros(length(x),1);
+        newq(1:length(q)) = q;
+        q = newq;
+        
+        [h w] = size(sump);
+        newsump = zeros(length(x),w);
+        newsump(1:h,:) = sump;
+        sump = newsump;
+        
+    end
+
     [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints);
 %     vchange = similarity(x, sump);
-    vchange = vchange - 0.49;
-    [curr_time vchange]
+    vchange = vchange - 0.3;
+%     [curr_time vchange]
 
 end
 
