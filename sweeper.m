@@ -5,7 +5,7 @@ v2   = 30;  % depolymerization
 fcat = 2; % catastrophe
 fres = 1.2; % rescue
 % rs   = 0:0.1:2; % nucleation rate
-rs = 2;
+rs = 1;
 dim  = 1;  % dimension of system
 
 tic
@@ -18,7 +18,9 @@ for i = 1:length(rs)
 %     [x, tpoints, sump] = solve_advection(v1,v2,fcat,fres,r,dim,r_c,v_theor);
     [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
 %     [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
-    v_sim = extractV(x,tpoints,sump,dim);
+    figure; plot(x,sump)
+
+%     v_sim = extractV(x,tpoints,sump,dim);
  
 %     figure(1); hold on;
 %     plot(r,v_theor, 'bo')

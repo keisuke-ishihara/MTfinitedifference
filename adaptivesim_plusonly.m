@@ -15,8 +15,9 @@ clc;
 dt = 0.05/max([r fcat fres]); % discretization of time
 dx = gcd(v1,v2)*dt;
 
-xmin = 1; xmax = 400;
-x = xmin:dx:xmax; m = length(x);
+xmin = 1; xmax = 1000;
+x_init = xmin:dx:xmax; m = length(x_init);
+x = x_init;
 
 %% initial condition
 
@@ -33,7 +34,7 @@ sump = p0; tpoints = 0;
 %% simulation
 
 % first simulation with pre-fixed time
-prefixedtime = 50; p = p0; q = q0;
+prefixedtime = 20; p = p0; q = q0;
 [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, prefixedtime, sump, tpoints);
 
 % assess similarity of the fronts
@@ -44,10 +45,12 @@ vchange = 1;
 % continue with simulations if necessary
 while vchange > 0.05
 
-    moretime = 50;
+    moretime = 20;
+%     if edgepos 
+%     end
     [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints);
 %     vchange = similarity(x, sump);
-    vchange = vchange - 0.23;
+    vchange = vchange - 0.49;
     [curr_time vchange]
 
 end
