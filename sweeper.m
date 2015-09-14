@@ -3,7 +3,7 @@ clear all; close all; clc;
 v1   = 20;  % polymerization
 v2   = 30;  % depolymerization
 fcat = 2; % catastrophe
-fres = 1.2; % rescue
+fres = 0.6; % rescue
 % rs   = 0:0.1:2; % nucleation rate
 rs = 1.5;
 dim  = 1;  % dimension of system

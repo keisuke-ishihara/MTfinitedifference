@@ -6,8 +6,9 @@ function [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
 %
 
 global v1 v2 fcat fres r dim
-global cap dt dx
+global cap dt dx vchange_tol
 cap = 1;  % carrying capacity
+vchange_tol = 0.03; % criteria for convergence of advancing front
 clc;
 
 %% decide on stepsizes of time and space
@@ -20,7 +21,7 @@ dx = gcd(v1,v2)*dt;
 
 [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
 
-xmin = 1; xmax = 100+prefixedtime*v_theor*1.2;
+xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
 x_init = xmin:dx:xmax; m = length(x_init);
 x = x_init;
 
@@ -45,13 +46,15 @@ p = p0; q = q0;
 
 % assess similarity of the fronts
 % vchange = similarity(x, sump); 
-vchange = 1;
-% [curr_time vchange]
+va = extractV(x, tpoints, sump, dim);
+vb = extractV(x, tpoints(1:end-10), sump(:,1:end-10), dim);
+vchange = abs(vb-va)/va;
+[curr_time vchange]
 
 % continue with simulations if necessary
-while vchange > 0.05
+while vchange > vchange_tol
 
-    edgepos = whereisedge(x, p)
+    edgepos = whereisedge(x, p);
     if edgepos > max(x)-v_theor*1.2*moretime;
         
         % extend x space
@@ -74,11 +77,14 @@ while vchange > 0.05
     end
 
     [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints);
-%     vchange = similarity(x, sump);
-    vchange = vchange - 0.3;
-%     [curr_time vchange]
+
+    va = extractV(x, tpoints, sump, dim);
+    vb = extractV(x, tpoints(1:end-10), sump(:,1:end-10), dim);
+    vchange = abs(vb-va)/va;
+    [curr_time vchange va vb]
 
 end
+
 
 
 end

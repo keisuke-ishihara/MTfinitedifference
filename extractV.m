@@ -28,12 +28,23 @@ p = p_norm;
 %     val = [val pnow(I)];
 % end
 
-% half max method
+% % half max method
+% pos = []; val = [];
+% for i = 1:length(t)
+%     pnow = p(:,i);
+%     hm = 0.5*max(pnow);
+%     [M Imax] = max(pnow);
+%     pnow(1:Imax) = zeros(1,Imax); 
+%     [M I] = min(abs(pnow-hm));
+%     pos = [pos x(I)];
+%     val = [val pnow(I)];
+% end
 
+% quarter max method
 pos = []; val = [];
 for i = 1:length(t)
     pnow = p(:,i);
-    hm = 0.5*max(pnow);
+    hm = 0.25*max(pnow);
     [M Imax] = max(pnow);
     pnow(1:Imax) = zeros(1,Imax); 
     [M I] = min(abs(pnow-hm));
@@ -60,17 +71,17 @@ end
 %     plot(x(I),pnow(I),'r*');
 % end
 
-figure(2); hold on;
-% plot(x, p(:,end/2:end))
-% plot(x, p)
-% plot(pos, val, 'r*' )
-semilogx(x, p)
-semilogx(pos, val, 'r*' )
+% figure(2); hold on;
+% % plot(x, p(:,end/2:end))
+% % plot(x, p)
+% % plot(pos, val, 'r*' )
+% semilogx(x, p)
+% semilogx(pos, val, 'r*' )
 
 PS = polyfit(t,pos,1);
-figure(3); hold on;
-plot(t,pos, 'k*')
-plot(t,t*PS(1)+PS(2),'r')
+% figure(3); hold on;
+% plot(t,pos, 'k*')
+% plot(t,t*PS(1)+PS(2),'r')
 
 velocity = PS(1);
 

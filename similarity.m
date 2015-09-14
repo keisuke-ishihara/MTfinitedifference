@@ -22,7 +22,7 @@ end
 
 % vchange =
 
-vchange = 0.05
+vchange = 0.05;
 
 end
 
