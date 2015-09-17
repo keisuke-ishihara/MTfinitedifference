@@ -55,12 +55,12 @@ p = p_norm;
 
 %% area under the curve method
 
-cutoff = 0.5;
+cutoff = 0.3;
 
 i = 1;
 pnow = p(:,i);
 [M Imax] = max(pnow);
-pnow(1:Imax) = zeros(1,Imax);
+pnow(1:Imax) = M*ones(1,Imax);
 pnow(pnow>cutoff) = cutoff*ones(1,length(pnow(pnow>cutoff)));
 
 v = [];
@@ -68,7 +68,7 @@ for i = 2:length(t)
     
     pnext = p(:,i);
     [M Imax] = max(pnext);
-    pnext(1:Imax) = zeros(1,Imax);
+    pnext(1:Imax) = M*ones(1,Imax);
     pnext(pnext>cutoff) = cutoff*ones(1,length(pnext(pnext>cutoff)));
 
     diffarea = sum(pnext)-sum(pnow);

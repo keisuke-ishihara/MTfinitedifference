@@ -18,7 +18,7 @@ clc;
 prefixedtime = 40;
 moretime = 10;
 
-dt = 0.05/max([r fcat fres]); % discretization of time
+dt = 0.01/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
