@@ -1,9 +1,7 @@
-function [ edgepos ] = whereisedge(x, p)
+function [ edgepos ] = whereisedge(x, p, cap)
 %WHEREISEDGE 
 % given curve p, finds the position of the leading edge (decreasing slope with x)
 %
-
-global cap
 
 % finds the maximum of the curve, anything left to the maximum is set to
 % maximum

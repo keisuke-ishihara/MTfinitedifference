@@ -1,24 +1,24 @@
-function [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
+function [x, tpoints, sump, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
 % only accounts for plus end
 %
 % adaptive simulator, stops when the front reaches a constant shape
 %
 
-global v1 v2 fcat fres r dim
-global cap dt dx vchange_tol n_store n_chomp
+% global v1 v2 fcat fres r dim
+% global cap dt dx vchange_tol n_store n_chomp
+% global cap dt dx vchange_tol n_store n_chomp
 cap = 1;  % carrying capacity
 vchange_tol = 0.01; % criteria for convergence of advancing front
 n_store = 10; % how many time points to store per iteration
 n_chomp = 5;  % n_store > 2*n_chomp recommended?
-clc;
 
 %% decide on stepsizes of time and space
 
 prefixedtime = 40;
 moretime = 10;
 
-dt = 0.01/max([r fcat fres]); % discretization of time
+dt = 0.04/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -28,6 +28,8 @@ dx = gcd(v1,v2)*dt;
 xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
 x_init = xmin:dx:xmax; m = length(x_init);
 x = x_init;
+
+params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
 %% initial condition
 
@@ -45,18 +47,18 @@ sump = p0; tpoints = 0;
 
 % first simulation with pre-fixed time
 p = p0; q = q0;
-[p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, prefixedtime, sump, tpoints);
+[p q curr_time sump tpoints] = solver_plusonly(x, p, q, params, curr_time, prefixedtime, sump, tpoints);
 
-va = extractV(x, tpoints, sump, dim);
-figure(1);
-plot(curr_time, va, 'o');
+va = extractV(x, tpoints, sump, dim, n_chomp);
+% figure(1);
+% plot(curr_time, va, 'o');
 
 % continue with simulations if necessary
 top = 0.1; vchange = 0.3; vold = va;
 
-while ( vchange > vchange_tol)||(top < 0.5)
+while (vchange > vchange_tol)||(top < 0.5)
 
-    edgepos = whereisedge(x, p);
+    edgepos = whereisedge(x, p, cap);
     if edgepos > max(x)-v_theor*1.2*moretime;
         
         % extend x space
@@ -78,29 +80,35 @@ while ( vchange > vchange_tol)||(top < 0.5)
         
     end
 
-    [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints);
+    [p q curr_time sump tpoints] = solver_plusonly(x, p, q, params, curr_time, moretime, sump, tpoints);
    
-    va = extractV(x, tpoints, sump, dim);
+    va = extractV(x, tpoints, sump, dim, n_chomp);
     vchange = abs(va-vold)/vold;
 
-    figure(1); hold on;
-    plot(curr_time, va, 'o');
-    title('velocity')
+%     figure(1); hold on;
+%     plot(curr_time, va, 'o');
+%     title('velocity')
+%     
+%     figure(2); hold on;
+%     plot(curr_time, abs(va-v_theor)/v_theor, 'o')
+%     title('percent error rt theory')
+%     
+%     figure(3); hold on;
+%     plot(curr_time, log(vchange), '*')
+%     title('log(vchange)')
     
-    figure(2); hold on;
-    plot(curr_time, abs(va-v_theor)/v_theor, 'o')
-    title('percent error rt theory')
-    
-    figure(3); hold on;
-    plot(curr_time, log(vchange), '*')
-    title('log(vchange)')
-    
-    [curr_time v_theor va abs(va-v_theor)/v_theor vchange]
+%     [curr_time v_theor va abs(va-v_theor)/v_theor vchange];
     
     top = max(sump(:,end));
     vold = va;
+    
+    if va < 1e4
+        break
+    end
+    
 end
 
+v_sim = va;
 
 end
 

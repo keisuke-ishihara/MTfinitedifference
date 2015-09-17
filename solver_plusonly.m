@@ -1,10 +1,24 @@
-function [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints)
+function [p q curr_time sump tpoints] = solver_plusonly(x, p, q, params, curr_time, moretime, sump, tpoints)
 %SOLVER_PLUSONLY 
 %
 %   solve time evolution of the system, this only accounts for plus ends
 %
 
-global v1 v2 fcat fres r dim cap dt dx n_store
+% global v1 v2 fcat fres r dim cap dt dx n_store
+
+% [v1 v2 fcat fres r dim cap dt dx n_store ] = params;
+v1 = params(1);
+v2 = params(2);
+fcat= params(3);
+fres= params(4);
+r= params(5);
+dim= params(6);
+cap= params(7);
+dt= params(8);
+dx= params(9);
+n_store= params(10);
+% n_chomp = params();
+% vchange_tol= params();
 
 tmin = curr_time; tmax = curr_time+moretime;
 t = tmin:dt:tmax;

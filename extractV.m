@@ -1,10 +1,7 @@
-function [velocity ] = extractV(x, tpoints, sump, dim)
+function [velocity ] = extractV(x, tpoints, sump, dim, n)
 %EXTRACTV
 % calculates the velocity of the expansion from simulation curves
 
-global n_chomp
-
-n = n_chomp;
 t = tpoints(end-n+1:end);
 p = sump(:,end-n+1:end);
 dx = x(2)-x(1);
