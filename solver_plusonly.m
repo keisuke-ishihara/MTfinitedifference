@@ -4,7 +4,7 @@ function [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, more
 %   solve time evolution of the system, this only accounts for plus ends
 %
 
-global v1 v2 fcat fres r dim cap dt dx
+global v1 v2 fcat fres r dim cap dt dx n_store
 
 tmin = curr_time; tmax = curr_time+moretime;
 t = tmin:dt:tmax;
@@ -48,7 +48,7 @@ for j = 1:n
     curr_time = curr_time + dt;
     
     % choose time points to add to sump
-    if mod(j,floor(n/20)) == 0
+    if mod(j,floor(n/n_store)) == 0
         sump = [sump p];
 %         sumq = [sumq q];
         tpoints = [tpoints curr_time];

@@ -6,17 +6,21 @@ function [x, tpoints, sump] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
 %
 
 global v1 v2 fcat fres r dim
-global cap dt dx vchange_tol
+global cap dt dx vchange_tol n_store n_chomp
 cap = 1;  % carrying capacity
-vchange_tol = 0.03; % criteria for convergence of advancing front
+vchange_tol = 0.01; % criteria for convergence of advancing front
+n_store = 10; % how many time points to store per iteration
+n_chomp = 5;  % n_store > 2*n_chomp recommended?
 clc;
 
 %% decide on stepsizes of time and space
 
-prefixedtime = 10;
-moretime = 30;
+prefixedtime = 40;
+moretime = 10;
 
 dt = 0.05/max([r fcat fres]); % discretization of time
+% making this smaller has a great effect on the accuracy of the simulation
+
 dx = gcd(v1,v2)*dt;
 
 [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
@@ -24,7 +28,6 @@ dx = gcd(v1,v2)*dt;
 xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
 x_init = xmin:dx:xmax; m = length(x_init);
 x = x_init;
-
 
 %% initial condition
 
@@ -44,15 +47,14 @@ sump = p0; tpoints = 0;
 p = p0; q = q0;
 [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, prefixedtime, sump, tpoints);
 
-% assess similarity of the fronts
-% vchange = similarity(x, sump); 
 va = extractV(x, tpoints, sump, dim);
-vb = extractV(x, tpoints(1:end-10), sump(:,1:end-10), dim);
-vchange = abs(vb-va)/va;
-[curr_time vchange]
+figure(1);
+plot(curr_time, va, 'o');
 
 % continue with simulations if necessary
-while vchange > vchange_tol
+top = 0.1; vchange = 0.3; vold = va;
+
+while ( vchange > vchange_tol)||(top < 0.5)
 
     edgepos = whereisedge(x, p);
     if edgepos > max(x)-v_theor*1.2*moretime;
@@ -77,14 +79,27 @@ while vchange > vchange_tol
     end
 
     [p q curr_time sump tpoints] = solver_plusonly(x, p, q, curr_time, moretime, sump, tpoints);
-
+   
     va = extractV(x, tpoints, sump, dim);
-    vb = extractV(x, tpoints(1:end-10), sump(:,1:end-10), dim);
-    vchange = abs(vb-va)/va;
-    [curr_time vchange va vb]
+    vchange = abs(va-vold)/vold;
 
+    figure(1); hold on;
+    plot(curr_time, va, 'o');
+    title('velocity')
+    
+    figure(2); hold on;
+    plot(curr_time, abs(va-v_theor)/v_theor, 'o')
+    title('percent error rt theory')
+    
+    figure(3); hold on;
+    plot(curr_time, log(vchange), '*')
+    title('log(vchange)')
+    
+    [curr_time v_theor va abs(va-v_theor)/v_theor vchange]
+    
+    top = max(sump(:,end));
+    vold = va;
 end
-
 
 
 end
