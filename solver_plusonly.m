@@ -21,7 +21,7 @@ n_store= params(10);
 % vchange_tol= params();
 
 tmin = curr_time; tmax = curr_time+moretime;
-t = tmin:dt:tmax;
+t = tmin:dt:tmax; t = t(2:end);
 n = length(t);
 m = length(x);
 
@@ -29,6 +29,14 @@ p_old = p; q_old = q;
 
 a = v1*dt/dx; 
 b = v2*dt/dx; b = fix(b); 
+
+pflux = zeros(m,1);
+for i = 1:m;
+    if (x(i)<= 10 && x(i)>=0.1)
+        pflux(i) = 0.1;
+    end
+end
+
 
 for j = 1:n
     
@@ -52,9 +60,12 @@ for j = 1:n
     end
     nuc = r*p.*(1-p_norm/cap)*dt; 
     
-    nuc(nuc(:)<0) = 0;
+    nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
     p = p + nuc;    
-  
+    
+    p = p+pflux;
+    p(p>1) = ones(sum(p>1),1);
+    
     p_old = p;
     q_old = q;
     

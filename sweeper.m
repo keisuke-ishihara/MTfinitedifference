@@ -1,15 +1,24 @@
 clear all;
-% close all; clc;
+close all; clc;
 
-v1   = 20;  % polymerization
-v2   = 30;  % depolymerization
+v1   = 30;  % polymerization
+v2   = 20;  % depolymerization
 fcat = 2; % catastrophe
 fres = 0.3; % rescue
-% rs   = 0:0.1:2; % nucleation rate
-rs = [0.6:0.05:2.4];
+% rs = [1.4:-0.1:0.8];
+rs = [1:0.2:1.6];
+
+% rs = 1.4;
+
+% v1   = 20;  % polymerization
+% v2   = 18;  % depolymerization
+% fcat = 3; % catastrophe
+% fres = 1; % rescue
+% rs = [0.1:0.2:3.3];
+
 dim  = 1;  % dimension of system
 
-tic
+% tic
 v_theors = []; v_sims = [];
 for i = 1:length(rs) 
     
@@ -21,6 +30,9 @@ for i = 1:length(rs)
  
     v_theors = [v_theors v_theor];
     v_sims = [v_sims v_sim];
+    
+    figure;
+    plot(x, sump(:,end-5:end))
 %     [v_theor, v_sim]
 
 
@@ -34,6 +46,7 @@ end
  
 % [rs' v_theors' v_sims']
 
-figure;
-plot(rs, v_theors, 'b', rs, v_sims, 'r*');
-legend('theory','simulation')
+figure; hold on;
+plot(rs, v_theors, 'b', rs, v_sims, 'ro');
+plot(r_c, 0, 'g*');
+% legend('theory','simulation');

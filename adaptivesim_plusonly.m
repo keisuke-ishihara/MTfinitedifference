@@ -9,16 +9,18 @@ function [x, tpoints, sump, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
 % global cap dt dx vchange_tol n_store n_chomp
 % global cap dt dx vchange_tol n_store n_chomp
 cap = 1;  % carrying capacity
-vchange_tol = 0.01; % criteria for convergence of advancing front
-n_store = 10; % how many time points to store per iteration
+vchange_tol = 0.03; % criteria for convergence of advancing front
+n_store = 20; % how many time points to store per iteration
 n_chomp = 5;  % n_store > 2*n_chomp recommended?
 
 %% decide on stepsizes of time and space
 
-prefixedtime = 40;
+prefixedtime = 50;
 moretime = 10;
+% mintime = 640;
+maxtime = 640;
 
-dt = 0.04/max([r fcat fres]); % discretization of time
+dt = 0.02/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -50,14 +52,15 @@ p = p0; q = q0;
 [p q curr_time sump tpoints] = solver_plusonly(x, p, q, params, curr_time, prefixedtime, sump, tpoints);
 
 va = extractV(x, tpoints, sump, dim, n_chomp);
+
 % figure(1);
 % plot(curr_time, va, 'o');
 
 % continue with simulations if necessary
 top = 0.1; vchange = 0.3; vold = va;
 
-while (vchange > vchange_tol)||(top < 0.5)
-
+while ~((vchange < vchange_tol)&&(top > 0.95))
+    
     edgepos = whereisedge(x, p, cap);
     if edgepos > max(x)-v_theor*1.2*moretime;
         
@@ -83,8 +86,9 @@ while (vchange > vchange_tol)||(top < 0.5)
     [p q curr_time sump tpoints] = solver_plusonly(x, p, q, params, curr_time, moretime, sump, tpoints);
    
     va = extractV(x, tpoints, sump, dim, n_chomp);
-    vchange = abs(va-vold)/vold;
-
+%     vchange = abs(va-vold)/abs(vold);
+    vchange = abs(va-vold)/v1;
+    
 %     figure(1); hold on;
 %     plot(curr_time, va, 'o');
 %     title('velocity')
@@ -102,11 +106,28 @@ while (vchange > vchange_tol)||(top < 0.5)
     top = max(sump(:,end));
     vold = va;
     
-    if va < 1e4
-        break
+    if (curr_time>maxtime+moretime)&&(top>0.95)
+        vchange
     end
     
+    if (va<1e-4)&&(curr_time>maxtime)
+        disp('break from va<1e-4 and maxtime')
+        break
+    end
+   
+%     if curr_time > maxtime
+%         break
+%     end
+
+    
+%     if (va < 1e-5)&&(curr_time > 1/(r-r_c))
+%         r
+%         break
+%     end
+    
 end
+
+[r curr_time va vchange top abs((va-v_theor)/v1)]
 
 v_sim = va;
 
