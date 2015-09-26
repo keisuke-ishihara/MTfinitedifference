@@ -57,7 +57,7 @@ vone = velocity;
 
 %% area under the curve method
 
-cutoff = 0.05;
+cutoff = 0.01;
 
 i = 1;
 pnow = p(:,i);
@@ -83,8 +83,10 @@ for i = 2:length(t)
 end
 
 % a = a/a(1);
-velocity = mean(v);
 
+velocity = v(end);
+% velocity = vone;
+% velocity = mean(v);
 % [vone velocity v]
 
 end

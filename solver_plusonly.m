@@ -32,8 +32,8 @@ b = v2*dt/dx; b = fix(b);
 
 pflux = zeros(m,1);
 for i = 1:m;
-    if (x(i)<= 10 && x(i)>=0.1)
-        pflux(i) = 0.1;
+    if (x(i)<= 5 && x(i)>=-5)
+        pflux(i) = 0.001;
     end
 end
 
@@ -60,12 +60,14 @@ for j = 1:n
     end
     nuc = r*p.*(1-p_norm/cap)*dt; 
     
-    nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
+%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
     p = p + nuc;    
+    q = q + r*q.*(1-q/cap)*dt;
     
-    p = p+pflux;
-    p(p>1) = ones(sum(p>1),1);
-    
+%     p = p+pflux;
+%     q = q+pflux;
+%     p(p>1) = ones(sum(p>1),1);
+
     p_old = p;
     q_old = q;
     
