@@ -6,7 +6,7 @@ v2   = 20;  % depolymerization
 fcat = 2; % catastrophe
 fres = 0.3; % rescue
 % rs = [1.4:-0.1:0.8];
-rs = [1:0.2:1.6];
+rs = [1:0.2:1.8];
 
 % rs = 1.4;
 
