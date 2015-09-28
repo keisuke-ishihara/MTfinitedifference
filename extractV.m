@@ -1,9 +1,11 @@
-function [velocity ] = extractV(x, tpoints, sump, dim, n)
+function [velocity] = extractV(x, tpoints, sump, dim, n)
 %EXTRACTV
 % calculates the velocity of the expansion from simulation curves
 
-t = tpoints(end-n+1:end);
-p = sump(:,end-n+1:end);
+% t = tpoints(end-n+1:end);
+% p = sump(:,end-n+1:end);
+t = tpoints;
+p = sump;
 dx = x(2)-x(1);
 
 dt = tpoints(end)-tpoints(end-1);
@@ -57,7 +59,7 @@ vone = velocity;
 
 %% area under the curve method
 
-cutoff = 0.01;
+cutoff = 0.001;
 
 i = 1;
 pnow = p(:,i);
@@ -83,10 +85,11 @@ for i = 2:length(t)
 end
 
 % a = a/a(1);
-
-velocity = v(end);
-% velocity = vone;
-% velocity = mean(v);
+figure(50); hold on;
+plot(tpoints(2:end), v)
+% figure(6); hold on;
+% plot(tpoints(2:end), log(v))
+velocity = mean(v(end-20:end));
 % [vone velocity v]
 
 end

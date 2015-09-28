@@ -25,30 +25,29 @@ t = tmin:dt:tmax; t = t(2:end);
 n = length(t);
 m = length(x);
 
-p_old = p; q_old = q;
-
 a = v1*dt/dx; 
 b = v2*dt/dx; b = fix(b); 
 
-pflux = zeros(m,1);
-for i = 1:m;
-    if (x(i)<= 5 && x(i)>=-5)
-        pflux(i) = 0.001;
-    end
-end
+% pflux = zeros(m,1);
+% for i = 1:m;
+%     if (x(i)<= 5 && x(i)>=-5)
+%         pflux(i) = 0.001;
+%     end
+% end
 
-
-for j = 1:n
+for j = 2:n
     
-    %  translation by advection     
-    p = [zeros(a,1); p_old(1:(m-a))];
-    q = [q_old((b+1):m); zeros(b,1)];
-            
+        
     % growth <-> shrink interconversion
     dp = -fcat*p*dt+fres*q*dt;
     dq = +fcat*p*dt-fres*q*dt;
     p = p+dp;
     q = q+dq;
+    
+    %  translation by advection     
+    p = [zeros(a,1); p(1:(m-a))];
+    q = [q((b+1):m); zeros(b,1)];
+
     
     % nucleation of growing plus ends, radial geometry
     if dim == 1
@@ -62,14 +61,11 @@ for j = 1:n
     
 %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
     p = p + nuc;    
-    q = q + r*q.*(1-q/cap)*dt;
+%     q = q + r*q.*(1-q/cap)*dt;
     
 %     p = p+pflux;
 %     q = q+pflux;
 %     p(p>1) = ones(sum(p>1),1);
-
-    p_old = p;
-    q_old = q;
     
     % update time
     curr_time = curr_time + dt;

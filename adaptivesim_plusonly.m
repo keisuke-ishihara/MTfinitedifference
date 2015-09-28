@@ -10,12 +10,12 @@ function [x, tpoints, sump, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
 % global cap dt dx vchange_tol n_store n_chomp
 cap = 1;  % carrying capacity
 vchange_tol = 0.03; % criteria for convergence of advancing front
-n_store = 20; % how many time points to store per iteration
+n_store = 200; % how many time points to store per iteration
 n_chomp = 5;  % n_store > 2*n_chomp recommended?
 
 %% decide on stepsizes of time and space
 
-prefixedtime = 20/0.01;
+prefixedtime = 16/0.01;
 moretime = 10;
 % mintime = 640;
 maxtime = 640;
@@ -29,7 +29,7 @@ dx = gcd(v1,v2)*dt;
 
 % xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
 % x_init = xmin:dx:xmax;m = length(x_init);
-x_init = -1000:dx:1000; m = length(x_init);
+x_init = -2000:dx:2000; m = length(x_init);
 x = x_init;
 
 params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
