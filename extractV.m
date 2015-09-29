@@ -84,13 +84,12 @@ for i = 2:length(t)
 
 end
 
-% a = a/a(1);
 figure(50); hold on;
 plot(tpoints(2:end), v)
-% figure(6); hold on;
-% plot(tpoints(2:end), log(v))
+figure(51); hold on;
+plot(tpoints(3:end), log(abs(diff(v))))
+
 velocity = mean(v(end-20:end));
-% [vone velocity v]
 
 end
 

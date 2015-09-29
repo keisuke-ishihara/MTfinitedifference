@@ -1,8 +1,9 @@
 clear all;
+close all;
 % close all; clc;
 
 v1   = 1;  % polymerization
-v2   = 1;  % depolymerization
+v2   = 2;  % depolymerization
 fcat = 0.2; % catastrophe
 fres = 0.2; % rescue
 % rs = [1.4:-0.1:0.8];
@@ -45,19 +46,27 @@ for i = 1:length(rs)
     figure; plot(x, sump(:,end-5:end))
 %     figure; plot(x, log(sump(:,end-5:end)))
     
-    run tst
+%     run tst
     [r/fcat tpoints(end) toc]
 
 end
 
+finers = linspace(0,max(rs),1000);
+v_KKfine = zeros(1,length(finers));
+for i = 1:length(finers)    
+    [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,finers(i));
+    v_KKfine(1,i) = v_theor;
+end
     
 [rs'/fcat v_KKs' v_sims']
 
 figure; hold on;
-% plot(rs, v_theors, 'b', rs, v_theors2, 'g', rs, v_sims, 'ro');
-plot(rs, v_KKs, 'g', rs, v_sims, 'ro');
+plot(finers, v_KKfine, 'g', rs, v_sims, 'ro');
+plot(r_c,0, 'b*')
+
 figure; hold on;
-plot(rs, abs(v_sims-v_KKs)./v_KKs, 'o'); title('percent error');
+plot(rs, abs(v_sims-v_KKs)./v_KKs, 'o'); title('error');
+
 figure;
 plot(rs, v_sims./v_KKs, 'o'); title('normalized');
 % figure; hold on;

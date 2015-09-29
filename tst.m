@@ -1,4 +1,5 @@
-a = log(sump(ceil(end/2):end,end-20:end));
+% a = log(sump(ceil(end/2):end,end-20:end));
+a = log(sump(:,end-20:end));
 
 cut = [-1:-1:-701];
 
@@ -21,9 +22,9 @@ for i = 1:length(cut)
     
 end
 
-% figure;
-% plot(-cut, vels, 'r.', -cut, vt2,'b.')
-% title(num2str(r));
+figure;
+plot(-cut, vels, 'r.', -cut, v_theor,'b.')
+title(num2str(r));
 
 
 % v_theors2
