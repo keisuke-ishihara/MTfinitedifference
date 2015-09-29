@@ -15,12 +15,13 @@ n_chomp = 5;  % n_store > 2*n_chomp recommended?
 
 %% decide on stepsizes of time and space
 
-prefixedtime = 16/0.01;
+% prefixedtime = 16/0.01;
+prefixedtime = 600+3/r;
 moretime = 10;
 % mintime = 640;
 maxtime = 640;
 
-dt = 0.2/max([r fcat fres]); % discretization of time
+dt = 0.03/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -29,7 +30,7 @@ dx = gcd(v1,v2)*dt;
 
 % xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
 % x_init = xmin:dx:xmax;m = length(x_init);
-x_init = -2000:dx:2000; m = length(x_init);
+x_init = -800:dx:800; m = length(x_init);
 x = x_init;
 
 params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];

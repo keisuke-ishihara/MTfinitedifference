@@ -21,11 +21,9 @@ for i = 1:length(cut)
     
 end
 
-figure;
-% subplot(1,2,1)
-% plot(-cut, vels, 'r.', -cut, sqrt(4*(v1*v2)/(fcat+fres)*r)/(1+0.5*r/fcat)*ones(1,length(vels)),'b')
-plot(-cut, vels, 'r.', -cut, vt2,'b.')
-title(num2str(r));
+% figure;
+% plot(-cut, vels, 'r.', -cut, vt2,'b.')
+% title(num2str(r));
 
 
 % v_theors2
