@@ -25,7 +25,7 @@ t = tmin:dt:tmax; t = t(2:end);
 n = length(t);
 m = length(x);
 
-a = v1*dt/dx; 
+a = v1*dt/dx; a = fix(a); 
 b = v2*dt/dx; b = fix(b); 
 
 % pflux = zeros(m,1);
@@ -36,13 +36,13 @@ b = v2*dt/dx; b = fix(b);
 % end
 
 for j = 2:n
-    
+
     %  translation by advection     
 %     p = [zeros(a,1); p(1:(m-a))];
 %     p = [sum(q(1:b))/a*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin
     p = [cap; zeros(a-1,1); p(1:(m-a))];  % origin conc = cap
     q = [q((b+1):m); zeros(b,1)];
-
+    
     % growth <-> shrink interconversion
     dp = -fcat*p*dt+fres*q*dt;
     dq = +fcat*p*dt-fres*q*dt;
