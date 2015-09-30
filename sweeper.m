@@ -4,8 +4,8 @@ close all;
 
 v1   = 1;  % polymerization
 v2   = 2;  % depolymerization
-fcat = 0.2; % catastrophe
-fres = 0.2; % rescue
+fcat = 0.6; % catastrophe
+fres = 0.06; % rescue
 % rs = [1.4:-0.1:0.8];
 % rs = [10.^(-2:0.2:-1)];
 % rs = [10.^(-1.75:0.25:0.25)];
@@ -33,15 +33,15 @@ for i = 1:length(rs)
     
     v_sims = [v_sims v_sim];
     v_KKs = [v_KKs v_theor];
-    v_Fishers = [v_Fishers sqrt(4*(v1*v2)/(fcat+fres)*r)];
     
-    vH = sqrt(4*v1*v2/fcat*r)/(1+r/fcat);
-    if r > fcat
-%     vH = sqrt(4*v1*v2/(fcat+fres)*r)/(1+r/(fcat+fres));
-%     if r > fcat+fres
-        vH = v1;
-    end
-    v_Holmes  = [v_Holmes vH];
+%     v_Fishers = [v_Fishers sqrt(4*(v1*v2)/(fcat+fres)*r)];
+%     vH = sqrt(4*v1*v2/fcat*r)/(1+r/fcat);
+%     if r > fcat
+% %     vH = sqrt(4*v1*v2/(fcat+fres)*r)/(1+r/(fcat+fres));
+% %     if r > fcat+fres
+%         vH = v1;
+%     end
+%     v_Holmes  = [v_Holmes vH];
     
     figure; plot(x, sump(:,end-5:end))
 %     figure; plot(x, log(sump(:,end-5:end)))
@@ -60,16 +60,15 @@ end
     
 [rs'/fcat v_KKs' v_sims']
 
-figure; hold on;
-plot(finers, v_KKfine, 'g', rs, v_sims, 'ro');
-plot(r_c,0, 'b*')
+FigHandle = figure('Position', [500, 100, 1000, 250]);
+subplot(1,3,1); hold on;
+plot(finers/fcat, v_KKfine, 'g', rs/fcat, v_sims, 'ro');
+plot(r_c/fcat,0, 'b*')
 
-figure; hold on;
-plot(rs, abs(v_sims-v_KKs)./v_KKs, 'o'); title('error');
+subplot(1,3,2); hold on;
+error = abs(v_sims-v_KKs)./v_KKs;
+plot(rs(rs>r_c)/fcat, error(rs>r_c), 'o', r_c/fcat,0, 'r*'); title('error');
 
-figure;
-plot(rs, v_sims./v_KKs, 'o'); title('normalized');
-% figure; hold on;
-% plot(rs, v_sims, 'o');
-% plot(r_c, 0, 'g*');
-% legend('theory','simulation');
+subplot(1,3,3); hold on;
+normalized = v_sims./v_KKs;
+plot(rs(rs>r_c)/fcat, normalized(rs>r_c), 'o', r_c/fcat,0, 'r*'); title('normalized');

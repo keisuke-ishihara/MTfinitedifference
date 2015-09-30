@@ -37,20 +37,17 @@ b = v2*dt/dx; b = fix(b);
 
 for j = 2:n
     
-        
-    % growth <-> shrink interconversion
-    dp = -fcat*p*dt+fres*q*dt;
-    dq = +fcat*p*dt-fres*q*dt;
-    p = p+dp;
-    q = q+dq;
-    
     %  translation by advection     
 %     p = [zeros(a,1); p(1:(m-a))];
 %     p = [sum(q(1:b))/a*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin
     p = [cap; zeros(a-1,1); p(1:(m-a))];  % origin conc = cap
     q = [q((b+1):m); zeros(b,1)];
 
-%     sum(q(1:b))/a*ones(a,1)
+    % growth <-> shrink interconversion
+    dp = -fcat*p*dt+fres*q*dt;
+    dq = +fcat*p*dt-fres*q*dt;
+    p = p+dp;
+    q = q+dq;
     
     % nucleation of growing plus ends, radial geometry
     if dim == 1
