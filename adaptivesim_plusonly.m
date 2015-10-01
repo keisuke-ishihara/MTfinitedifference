@@ -32,7 +32,7 @@ dx = gcd(v1,v2)*dt;
 
 % xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
 % x_init = xmin:dx:xmax;m = length(x_init);
-x_init = 0:dx:3000;
+x_init = -3000:dx:3000;
 % x_init = 0:dx:500;
 % x_init = 0:dx:400;
 m = length(x_init);

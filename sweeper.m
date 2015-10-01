@@ -40,7 +40,7 @@ for i = 1:length(rs)
 %     end
 %     v_Holmes  = [v_Holmes vH];
     
-    figure; plot(x, sump(:,end-5:end))
+    figure; plot(x, sump(:,10:10:200))
 %     figure; plot(x, log(sump(:,end-5:end)))
     
 %     run tst
