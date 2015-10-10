@@ -1,4 +1,4 @@
-function [x, tpoints, sump, q, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim)
+function [x, tpoints, sump, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
 % only accounts for plus end
 %
@@ -57,7 +57,7 @@ sump = p0; tpoints = 0;
 
 % first simulation with pre-fixed time
 p = p0; q = q0;
-[p q curr_time sump tpoints] = solver_plusonly(x, p, q, params, curr_time, prefixedtime, sump, tpoints);
+[p q curr_time sump tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sump, tpoints);
 
 va = extractV(x, tpoints, sump, dim, n_chomp);
 

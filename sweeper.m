@@ -7,8 +7,9 @@ v2   = 4;  % depolymerization
 % fcat = 3; % catastrophe
 % fres = 0.3; % rescue
 fcat = .4; % catastrophe
-fres = .02; % rescue
-rs = [0.02 0.05 0.1 0.2:0.1:1.3]*fcat;
+fres = .1; % rescue
+% rs = [0.02 0.05 0.1 0.2:0.1:1.3]*fcat;
+rs = [0.05 0.1 0.2:0.1:1.2]*fcat;
 
 % v1   = 30;  % polymerization
 % v2   = 20;  % depolymerization
@@ -26,7 +27,7 @@ for i = 1:length(rs)
     r = rs(i);
     
     [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
-    [x, tpoints, sump, q, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
+    [x, tpoints, sump, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim);
     
     v_sims = [v_sims v_sim];
     v_KKs = [v_KKs v_theor];
