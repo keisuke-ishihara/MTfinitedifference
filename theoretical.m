@@ -7,7 +7,7 @@ J = (v1*fres-v2*fcat)/(fres+fcat);
 
 %% calculations based on analytical solutions
 
-if J < 0
+if J <= 0
     % bounded dynamics
     r_critical = (sqrt(fcat)-sqrt(v1/v2*fres))^2;
     
