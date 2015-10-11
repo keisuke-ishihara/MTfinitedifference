@@ -1,4 +1,4 @@
-function [p q curr_time sump tpoints] = solver_plusminus(x, p, q, params, curr_time, moretime, sump, tpoints)
+function [p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, moretime, sumgrw, tpoints)
 %SOLVER_PLUSONLY 
 %
 %   solve time evolution of the system, this only accounts for plus ends
@@ -35,13 +35,16 @@ b = v2*dt/dx; b = fix(b);
 %     end
 % end
 
+count = [sum(sum(p))+sum(sum(q))];
 for j = 2:n
 
     %  translation by advection     
-    p = [zeros(a,1); p(1:(m-a))];
-%     p = [sum(q(1:b))/a*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin
-%     p = [cap; zeros(a-1,1); p(1:(m-a))];  % origin conc = cap
-    q = [q((b+1):m); zeros(b,1)];
+    p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
+    reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
+    for k = 1:a
+        p(k,k) = reb/a;
+    end
+    q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
     
     % growth <-> shrink interconversion
     dp = -fcat*p*dt+fres*q*dt;
@@ -51,16 +54,20 @@ for j = 2:n
     
     % nucleation of growing plus ends, radial geometry
     if dim == 1
-        p_norm = p;
+        grw_norm = sum(p,2);
     elseif dim == 2
-        p_norm = p./(2*pi*x/dx)';
+%         grw_norm = sum(p,2)./(2*pi*x/dx)';
+        stop
     else
         stop
     end
-    nuc = r*p.*(1-p_norm/cap)*dt; 
     
+    nuc = r*sum(p,2).*(1-grw_norm/dx/cap)*dt;
+%     nuc(nuc(:)<0) = 0;
+%     p(:,1) = p(:,1) + nuc;    
+        
 %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
-    p = p + nuc;    
+
 %     q = q + r*q.*(1-q/cap)*dt;
     
 %     p = p+pflux;
@@ -72,12 +79,19 @@ for j = 2:n
     
     % choose time points to add to sump
     if mod(j,floor(n/n_store)) == 0
-        sump = [sump p];
+        sumgrw = [sumgrw sum(p,2)];
 %         sumq = [sumq q];
         tpoints = [tpoints curr_time];
+        count = [count sum(sum(p))+sum(sum(q))];
     end
     
 end
+
+figure('Position', [100, 700, 300, 250]);
+plot(tpoints, count/count(1));
+title('no. particles');
+axis([0 tpoints(end) 0 1.2])
+count(1)
 
 end
 

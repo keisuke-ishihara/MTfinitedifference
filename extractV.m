@@ -84,8 +84,8 @@ for i = 2:length(t)
 
 end
 
-figure(50); hold on;
-plot(tpoints(2:end), v)
+% figure(50); hold on;
+% plot(tpoints(2:end), v)
 % figure(51); hold on;
 % plot(tpoints(3:end), log(abs(diff(v))))
 

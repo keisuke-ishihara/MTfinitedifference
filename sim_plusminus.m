@@ -1,4 +1,4 @@
-function [x, tpoints, sump, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim)
+function [x, tpoints, sumgrw, p, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
 % only accounts for plus end
 %
@@ -17,13 +17,13 @@ n_chomp = 5;  % n_store > 2*n_chomp recommended?
 
 % prefixedtime = 16/0.01;
 % prefixedtime = 40+3/r;
-prefixedtime = 640+3/r;
-% prefixedtime = 100+3/r;
+% prefixedtime = 640+3/r;
+prefixedtime = 100;
 moretime = 10;
 % mintime = 640;
 maxtime = 640;
 
-dt = 0.1/max([r fcat fres]); % discretization of time
+dt = 0.2/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -32,8 +32,8 @@ dx = gcd(v1,v2)*dt;
 
 % xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
 % x_init = xmin:dx:xmax;m = length(x_init);
-x_init = 0:dx:3000;
-% x_init = 0:dx:500;
+x_init = 0:dx:400;
+% x_init = 0:dx:3000;
 % x_init = 0:dx:400;
 m = length(x_init);
 x = x_init;
@@ -42,24 +42,26 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
 %% initial condition
 
-p0 = zeros(m,1); q0 = zeros(m,1);
+initpoprange = 5;
+p0 = zeros(m,m); q0 = zeros(m,m);
 for i = 1:m;
-    if (x(i)<=20 && x(i)>=-20)
-        p0(i) = cap;
-%         q0(i) = cap;
+    if (x(i)<=initpoprange && x(i)>=-10)
+        p0(i,i) = 10*dx/initpoprange;
     end
 end
 
 curr_time = 0;
-sump = p0; tpoints = 0;
+sumgrw = sum(p0,2); tpoints = 0;
 
 %% simulation
 
 % first simulation with pre-fixed time
 p = p0; q = q0;
-[p q curr_time sump tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sump, tpoints);
+[p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sumgrw, tpoints);
 
-va = extractV(x, tpoints, sump, dim, n_chomp);
+grw = sum(p,2);
+
+va = extractV(x, tpoints, grw', dim, n_chomp);
 
 % % figure(1);
 % % plot(curr_time, va, 'o');

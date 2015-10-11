@@ -5,7 +5,6 @@ function [p q curr_time sump tpoints] = solver_plusonly(x, p, q, params, curr_ti
 %
 
 % global v1 v2 fcat fres r dim cap dt dx n_store
-
 % [v1 v2 fcat fres r dim cap dt dx n_store ] = params;
 v1 = params(1);
 v2 = params(2);
@@ -35,11 +34,12 @@ b = v2*dt/dx; b = fix(b);
 %     end
 % end
 
+% count = [sum(p)+sum(q)];
 for j = 2:n
 
     %  translation by advection     
-    p = [zeros(a,1); p(1:(m-a))];
-%     p = [sum(q(1:b))/a*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin
+%     p = [zeros(a,1); p(1:(m-a))];
+    p = [sum(q(1:b))/a*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin
 %     p = [cap; zeros(a-1,1); p(1:(m-a))];  % origin conc = cap
     q = [q((b+1):m); zeros(b,1)];
     
@@ -49,7 +49,7 @@ for j = 2:n
     p = p+dp;
     q = q+dq;
     
-    % nucleation of growing plus ends, radial geometry
+%     % nucleation of growing plus ends, radial geometry
     if dim == 1
         p_norm = p;
     elseif dim == 2
@@ -57,15 +57,10 @@ for j = 2:n
     else
         stop
     end
-    nuc = r*p.*(1-p_norm/cap)*dt; 
+    nuc = r*p.*(1-p_norm/dx/cap)*dt; 
     
 %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
     p = p + nuc;    
-%     q = q + r*q.*(1-q/cap)*dt;
-    
-%     p = p+pflux;
-%     q = q+pflux;
-%     p(p>1) = ones(sum(p>1),1);
     
     % update time
     curr_time = curr_time + dt;
@@ -75,9 +70,16 @@ for j = 2:n
         sump = [sump p];
 %         sumq = [sumq q];
         tpoints = [tpoints curr_time];
+%         count = [count sum(p)+sum(q)];
     end
     
 end
+
+% figure('Position', [100, 700, 300, 250]);
+% plot(tpoints, count/count(1));
+% title('no. particles');
+% axis([0 tpoints(end) 0 1.2])
+% count(1)
 
 end
 
