@@ -56,20 +56,16 @@ for j = 2:n
     if dim == 1
         grw_norm = sum(p,2);
     elseif dim == 2
-%         grw_norm = sum(p,2)./(2*pi*x/dx)';
+%         grw_norm = sum(p,2)./(2*pi*x)';
         stop
     else
         stop
     end
     
-    nuc = r*sum(p,2).*(1-grw_norm/dx/cap)*dt;
-%     nuc(nuc(:)<0) = 0;
-%     p(:,1) = p(:,1) + nuc;    
-        
-%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
-
-%     q = q + r*q.*(1-q/cap)*dt;
-    
+    nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+    nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
+    p(:,1) = p(:,1) + nuc;    
+            
 %     p = p+pflux;
 %     q = q+pflux;
 %     p(p>1) = ones(sum(p>1),1);
@@ -80,7 +76,6 @@ for j = 2:n
     % choose time points to add to sump
     if mod(j,floor(n/n_store)) == 0
         sumgrw = [sumgrw sum(p,2)];
-%         sumq = [sumq q];
         tpoints = [tpoints curr_time];
         count = [count sum(sum(p))+sum(sum(q))];
     end
@@ -90,8 +85,7 @@ end
 figure('Position', [100, 700, 300, 250]);
 plot(tpoints, count/count(1));
 title('no. particles');
-axis([0 tpoints(end) 0 1.2])
-count(1)
+axis([0 tpoints(end) 0 1.1*max(count)/count(1)])
 
 end
 

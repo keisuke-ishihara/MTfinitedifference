@@ -61,7 +61,7 @@ p = p0; q = q0;
 
 grw = sum(p,2);
 
-va = extractV(x, tpoints, grw', dim, n_chomp);
+va = extractV(x, tpoints, grw', dim, n_chomp)
 
 % % figure(1);
 % % plot(curr_time, va, 'o');

@@ -39,7 +39,12 @@ for j = 2:n
 
     %  translation by advection     
 %     p = [zeros(a,1); p(1:(m-a))];
-    p = [sum(q(1:b))/a*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin
+%     p = [sum(q(1:b))/a*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin
+    reb = sum(q(1:b))/a;
+    if reb > cap*dx
+        reb = cap*dx;
+    end    
+    p = [reb*ones(a,1); p(1:(m-a))];  % shrinking ends reflect back at origin but cappted at conc
 %     p = [cap; zeros(a-1,1); p(1:(m-a))];  % origin conc = cap
     q = [q((b+1):m); zeros(b,1)];
     
@@ -53,11 +58,11 @@ for j = 2:n
     if dim == 1
         p_norm = p;
     elseif dim == 2
-        p_norm = p./(2*pi*x/dx)';
+        p_norm = p./(2*pi*x)';
     else
         stop
     end
-    nuc = r*p.*(1-p_norm/dx/cap)*dt; 
+    nuc = r*p.*(1-p_norm/cap)*dt; 
     
 %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
     p = p + nuc;    

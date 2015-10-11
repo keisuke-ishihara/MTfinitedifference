@@ -24,7 +24,7 @@ moretime = 10;
 % mintime = 640;
 maxtime = 640;
 
-dt = 0.03/max([r fcat fres]); % discretization of time
+dt = 0.05/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
