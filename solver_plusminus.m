@@ -54,15 +54,16 @@ for j = 2:n
     
     % nucleation of growing plus ends, radial geometry
     if dim == 1
-        grw_norm = sum(p,2);
+        grw_norm = sum(p,2)/dx;
     elseif dim == 2
-%         grw_norm = sum(p,2)./(2*pi*x)';
+        grw_norm = sum(p,2)./(2*pi*x*dx)';
         stop
     else
         stop
     end
     
-    nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+%     nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+    nuc = r*sum(p,2)*dt;
     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
     p(:,1) = p(:,1) + nuc;    
             

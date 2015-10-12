@@ -23,7 +23,7 @@ moretime = 10;
 % mintime = 640;
 maxtime = 640;
 
-dt = 0.2/max([r fcat fres]); % discretization of time
+dt = 0.08/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -42,11 +42,14 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
 %% initial condition
 
-initpoprange = 5;
+initpoprange = 30;
 p0 = zeros(m,m); q0 = zeros(m,m);
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
-        p0(i,i) = 10*dx/initpoprange;
+        p0(i,i) = cap*dx;
+%         if i ~= 1
+%             p0(i,i-1) = cap*dx;
+%         end
     end
 end
 

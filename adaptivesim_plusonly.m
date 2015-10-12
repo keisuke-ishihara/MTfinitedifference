@@ -47,7 +47,7 @@ initpoprange = 5;
 p0 = zeros(m,1); q0 = zeros(m,1);
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-20)
-        p0(i) = 10*dx/initpoprange;
+        p0(i) = cap*dx;
 %         q0(i) = cap;
     end
 end

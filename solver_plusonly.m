@@ -56,9 +56,9 @@ for j = 2:n
     
 %     % nucleation of growing plus ends, radial geometry
     if dim == 1
-        p_norm = p;
+        p_norm = p/dx;
     elseif dim == 2
-        p_norm = p./(2*pi*x)';
+        p_norm = p./(2*pi*x*dx)';
     else
         stop
     end
