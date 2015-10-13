@@ -9,7 +9,7 @@ fres = .1; % rescue
 
 % rs = [0.02 0.05 0.1 0.2:0.1:1.3]*fcat;
 % rs = [0.05 0.1 0.2:0.1:1.2]*fcat;
-rs = [0.8]*fcat;
+rs = [0.9]*fcat;
 
 
 J = (v1*fres-v2*fcat)/(fres+fcat);
