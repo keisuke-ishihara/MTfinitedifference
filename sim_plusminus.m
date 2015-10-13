@@ -10,31 +10,35 @@ function [x, tpoints, sumgrw, p, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim
 % global cap dt dx vchange_tol n_store n_chomp
 cap = 1;  % carrying capacity
 vchange_tol = 0.03; % criteria for convergence of advancing front
-n_store = 200; % how many time points to store per iteration
+n_store = 100; % how many time points to store per iteration
 n_chomp = 5;  % n_store > 2*n_chomp recommended?
+
+adaptiveon = 1;
 
 %% decide on stepsizes of time and space
 
+[r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
+
 % prefixedtime = 16/0.01;
 % prefixedtime = 40+3/r;
-% prefixedtime = 640+3/r;
-prefixedtime = 100;
-moretime = 10;
+prefixedtime = 400;
+% if r>r_c
+%     prefixedtime = prefixedtime + 10/(r-r_c);
+% end
+
+% prefixedtime = 200;
+moretime = 30;
 % mintime = 640;
 maxtime = 640;
 
-dt = 0.1/max([r fcat fres]); % discretization of time
+dt = 0.2/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
 
-[r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
-
-% xmin = 1; xmax = 400+prefixedtime*v_theor*1.2;
-% x_init = xmin:dx:xmax;m = length(x_init);
+% xmin = 0; xmax = 400+prefixedtime*v_theor;
+% x_init = xmin:dx:xmax;
 x_init = 0:dx:400;
-% x_init = 0:dx:3000;
-% x_init = 0:dx:400;
 m = length(x_init);
 x = x_init;
 
@@ -42,13 +46,13 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
 %% initial condition
 
-initpoprange = 30;
+initpoprange = 10;
 p0 = zeros(m,m); q0 = zeros(m,m);
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
-        p0(i,i) = 0.2*cap*dx;
+        p0(i,i) = 1*cap*dx;
         if i > 1
-            p0(i,i-1) = 0.6*cap*dx;
+            p0(i,i-1) = 1*cap*dx;
         end
     end
 end
@@ -67,7 +71,7 @@ va = extractV(x, tpoints, sumgrw, dim, n_chomp);
 % % figure(1);
 % % plot(curr_time, va, 'o');
 % 
-% % continue with simulations if necessary
+% continue with simulations if necessary
 % top = 0.1; vchange = 0.3; vold = va;
 % 
 % while ~((vchange < vchange_tol)&&(top > 0.95))
@@ -126,18 +130,18 @@ va = extractV(x, tpoints, sumgrw, dim, n_chomp);
 %         break
 %     end
 %    
-% %     if curr_time > maxtime
-% %         break
-% %     end
-% 
-%     
-% %     if (va < 1e-5)&&(curr_time > 1/(r-r_c))
-% %         r
-% %         break
-% %     end
+%     if curr_time > maxtime
+%         break
+%     end
+
+    
+%     if (va < 1e-5)&&(curr_time > 1/(r-r_c))
+%         r
+%         break
+%     end
 %     
 % end
-
+% 
 % [r curr_time va vchange top abs((va-v_theor)/v1)]
 
 v_sim = va;

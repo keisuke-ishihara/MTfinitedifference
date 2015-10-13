@@ -1,16 +1,15 @@
 clear all;
-close all;
-% close all; clc;
+close all; clc;
 
 v1   = 3;  % polymerization
 v2   = 4;  % depolymerization
-fcat = .4; % catastrophe
+fcat = .2; % catastrophe
 fres = .1; % rescue
 
 % rs = [0.02 0.05 0.1 0.2:0.1:1.3]*fcat;
-% rs = [0.05 0.1 0.2:0.1:1.2]*fcat;
-rs = [0.9]*fcat;
-
+rs = [0.5]*fcat;
+% rs = [0.9]*fcat;
+% rs = [0.9]*fcat;
 
 J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
@@ -47,7 +46,7 @@ for i = 1:length(rs)
 %     end
 %     v_Holmes  = [v_Holmes vH];
     
-    figure; plot(x, sump(:,1)/(x(2)-x(1)), x, sump(:,10:10:200)/(x(2)-x(1)))
+    figure; plot(x, sump(:,1)/(x(2)-x(1)), x, sump(:,10:floor(end/15):end)/(x(2)-x(1)))
      
 %     figure; plot(x, sump(:,end-5:end))
     
@@ -88,7 +87,7 @@ figure('Position', [100, 360, 300, 250]); plot(x,sum(p,2)/(x(2)-x(1)), x,sum(q,2
 % hold on; plot(x, (sum(p,2)+sum(q,2))/(x(2)-x(1)))
 figure('Position', [100, 10, 300, 250]); plot(x,log(sum(p,2)), x,log(smooth(sum(q,2))))
 
-finers = linspace(0,max(rs),1000);
+finers = linspace(0,1.2*fcat,1000);
 v_KKfine = zeros(1,length(finers));
 for i = 1:length(finers)    
     [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,finers(i));

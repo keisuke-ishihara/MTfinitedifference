@@ -56,7 +56,7 @@ end
 
 %% area under the curve method
 
-cutoff = 0.001;
+cutoff = 0.01;
 
 i = 1;
 pnow = p(:,i);
@@ -65,7 +65,7 @@ pnow(1:Imax) = 1*ones(1,Imax);
 pnow(pnow>cutoff) = cutoff*ones(1,length(pnow(pnow>cutoff)));
 
 v = [];
-a = [];
+% a = [];
 for i = 2:length(t)
     
     pnext = p(:,i);
@@ -85,8 +85,8 @@ end
 % plot(tpoints(2:end), v)
 % figure(51); hold on;
 % plot(tpoints(3:end), log(abs(diff(v))))
-
-velocity = mean(v(end-20:end));
+v
+velocity = mean(v(end-5:end));
 
 end
 
