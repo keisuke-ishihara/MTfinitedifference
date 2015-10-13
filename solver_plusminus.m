@@ -62,8 +62,7 @@ for j = 2:n
         stop
     end
     
-%     nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
-    nuc = r*sum(p,2)*dt;
+    nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
     p(:,1) = p(:,1) + nuc;    
             

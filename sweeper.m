@@ -9,8 +9,8 @@ fres = .1; % rescue
 
 % rs = [0.02 0.05 0.1 0.2:0.1:1.3]*fcat;
 % rs = [0.05 0.1 0.2:0.1:1.2]*fcat;
-% rs = [0.4:0.4:1.2]*fcat;
 rs = [0.8]*fcat;
+
 
 J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
@@ -95,11 +95,11 @@ for i = 1:length(finers)
     v_KKfine(1,i) = v_theor;
 end
    
-% [rs'/fcat v_KKs' v_sims']
+[rs'/fcat v_KKs' v_sims']
 
 use = sum(p,2)+sum(q,2);
 simmeanlength = sum((1:length(use)).*use')/sum(use)*(x(2)-x(1));
-[simmeanlength L]
+[simmeanlength L];
 
 FigHandle = figure('Position', [500, 100, 1000, 250]);
 subplot(1,3,1); hold on;

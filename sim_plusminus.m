@@ -23,7 +23,7 @@ moretime = 10;
 % mintime = 640;
 maxtime = 640;
 
-dt = 0.08/max([r fcat fres]); % discretization of time
+dt = 0.05/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -62,9 +62,7 @@ sumgrw = sum(p0,2); tpoints = 0;
 p = p0; q = q0;
 [p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sumgrw, tpoints);
 
-grw = sum(p,2);
-
-va = extractV(x, tpoints, grw', dim, n_chomp)
+va = extractV(x, tpoints, sumgrw, dim, n_chomp);
 
 % % figure(1);
 % % plot(curr_time, va, 'o');
