@@ -86,10 +86,10 @@ for j = 2:n
     
 end
 
-figure('Position', [100, 700, 300, 250]);
-plot(tpoints, count/count(1));
-title('no. particles');
-axis([0 tpoints(end) 0 1.1*max(count)/count(1)])
+% figure('Position', [100, 700, 300, 250]);
+% plot(tpoints, count/count(1));
+% title('no. particles');
+% axis([0 tpoints(end) 0 1.1*max(count)/count(1)])
 
 end
 

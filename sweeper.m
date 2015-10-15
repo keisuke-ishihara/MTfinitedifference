@@ -1,28 +1,16 @@
 clear all;
-close all; clc;
+close all;
 
-v1   = 3;  % polymerization
-v2   = 4;  % depolymerization
+% global tau lengthscale
+v1   = 30; % polymerization
+v2   = 40; % depolymerization
 fcat = 3; % catastrophe
 fres = 1; % rescue
-
-% rs = [0.02 0.05 0.1 0.2:0.1:1.3]*fcat;
-% rs = [0.8]*fcat;
-rs = 0.5*fcat;
-% rs = [0.9]*fcat;
-% rs = [0.9]*fcat;
-
+rs = [0.5]*fcat;
 
 J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
 meanlength = -D/J;
-
-% v1   = 30;  % polymerization
-% v2   = 20;  % depolymerization
-% fcat = 2; % catastrophe
-% fres = 0.3; % rescue
-% % rs = [1.4:-0.1:0.8];
-% rs = [1:0.2:1.6];
 
 dim  = 1;  % dimension of system
 
@@ -96,7 +84,7 @@ for i = 1:length(finers)
     v_KKfine(1,i) = v_theor;
 end
    
-[rs'/fcat v_KKs' v_sims']
+[rs'/fcat v_KKs' v_sims'];
 
 use = sum(p,2)+sum(q,2);
 simmeanlength = sum((1:length(use)).*use')/sum(use)*(x(2)-x(1));
