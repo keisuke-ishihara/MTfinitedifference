@@ -3,17 +3,19 @@ close all; clc;
 
 v1   = 3;  % polymerization
 v2   = 4;  % depolymerization
-fcat = .2; % catastrophe
-fres = .1; % rescue
+fcat = 3; % catastrophe
+fres = 1; % rescue
 
 % rs = [0.02 0.05 0.1 0.2:0.1:1.3]*fcat;
-rs = [0.5]*fcat;
+% rs = [0.8]*fcat;
+rs = 0.5*fcat;
 % rs = [0.9]*fcat;
 % rs = [0.9]*fcat;
+
 
 J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
-L = -D/J;
+meanlength = -D/J;
 
 % v1   = 30;  % polymerization
 % v2   = 20;  % depolymerization
@@ -98,7 +100,7 @@ end
 
 use = sum(p,2)+sum(q,2);
 simmeanlength = sum((1:length(use)).*use')/sum(use)*(x(2)-x(1));
-[simmeanlength L];
+[simmeanlength meanlength];
 
 FigHandle = figure('Position', [500, 100, 1000, 250]);
 subplot(1,3,1); hold on;

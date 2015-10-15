@@ -21,7 +21,7 @@ adaptiveon = 1;
 
 % prefixedtime = 16/0.01;
 % prefixedtime = 40+3/r;
-prefixedtime = 400;
+prefixedtime = 40;
 % if r>r_c
 %     prefixedtime = prefixedtime + 10/(r-r_c);
 % end
@@ -31,14 +31,14 @@ moretime = 30;
 % mintime = 640;
 maxtime = 640;
 
-dt = 0.2/max([r fcat fres]); % discretization of time
+dt = 0.1/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
 
 % xmin = 0; xmax = 400+prefixedtime*v_theor;
 % x_init = xmin:dx:xmax;
-x_init = 0:dx:400;
+x_init = 0:dx:130;
 m = length(x_init);
 x = x_init;
 
@@ -46,11 +46,11 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
 %% initial condition
 
-initpoprange = 10;
+initpoprange = 2;
 p0 = zeros(m,m); q0 = zeros(m,m);
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
-        p0(i,i) = 1*cap*dx;
+        p0(i,i) = 0.1*cap*dx;
         if i > 1
             p0(i,i-1) = 1*cap*dx;
         end

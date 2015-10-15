@@ -74,7 +74,11 @@ for j = 2:n
     curr_time = curr_time + dt;
     
     % choose time points to add to sump
-    if mod(j,floor(n/n_store)) == 0
+    if n < n_store
+        sumgrw = [sumgrw sum(p,2)];
+        tpoints = [tpoints curr_time];
+        count = [count sum(sum(p))+sum(sum(q))];    
+    elseif mod(j,floor(n/n_store)) == 0
         sumgrw = [sumgrw sum(p,2)];
         tpoints = [tpoints curr_time];
         count = [count sum(sum(p))+sum(sum(q))];
