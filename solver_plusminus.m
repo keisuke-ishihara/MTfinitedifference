@@ -25,8 +25,9 @@ t = tmin:dt:tmax; t = t(2:end);
 n = length(t);
 m = length(x);
 
-a = v1*dt/dx; a = fix(a); 
-b = v2*dt/dx; b = fix(b); 
+a1 = v1*dt/dx; a2 = fix(a1); [a1 a2]
+b1 = v2*dt/dx; b2 = fix(b1); [b1 b2]
+a = a2; b = b2; 
 
 % pflux = zeros(m,1);
 % for i = 1:m;
@@ -37,7 +38,7 @@ b = v2*dt/dx; b = fix(b);
 
 count = [sum(sum(p))+sum(sum(q))];
 for j = 2:n
-
+        
     %  translation by advection     
     p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
     reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
@@ -51,7 +52,7 @@ for j = 2:n
     dq = +fcat*p*dt-fres*q*dt;
     p = p+dp;
     q = q+dq;
-    
+     
     % nucleation of growing plus ends, radial geometry
     if dim == 1
         grw_norm = sum(p,2)/dx;
@@ -62,14 +63,14 @@ for j = 2:n
         stop
     end
     
+%     nuc = r*sum(p,2)*dt;
     nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
-    nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
-    p(:,1) = p(:,1) + nuc;    
-            
-%     p = p+pflux;
-%     q = q+pflux;
-%     p(p>1) = ones(sum(p>1),1);
+%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
+    p(:,1) = p(:,1) + nuc;
     
+%     p = p+dp;
+%     q = q+dq;
+            
     % update time
     curr_time = curr_time + dt;
     

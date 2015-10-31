@@ -1,7 +1,6 @@
 clear all;
 close all;
 
-% global tau lengthscale
 v1   = 30; % polymerization
 v2   = 40; % depolymerization
 fcat = 3; % catastrophe
@@ -36,9 +35,14 @@ for i = 1:length(rs)
 %     end
 %     v_Holmes  = [v_Holmes vH];
     
-    figure; plot(x, sump(:,1)/(x(2)-x(1)), x, sump(:,10:floor(end/15):end)/(x(2)-x(1)))
-     
-%     figure; plot(x, sump(:,end-5:end))
+    toplot = sump(:,10:floor(end/15):end)/(x(2)-x(1));
+    [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
+    
+    figure; hold on;
+    plot(x, sump(:,1)/(x(2)-x(1)), 'Color', grad(1,:));
+    for imat = 1:min(size(toplot))
+        plot(x, toplot(:,imat), 'Color', grad(imat+1,:));
+    end
     
 %     run tst
     [r/fcat tpoints(end) toc]
