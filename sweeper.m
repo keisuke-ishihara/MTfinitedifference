@@ -1,11 +1,14 @@
 clear all;
 close all;
 
-v1   = 30; % polymerization
-v2   = 40; % depolymerization
-fcat = 3; % catastrophe
-fres = 1; % rescue
-rs = [0.5]*fcat;
+% v1   = 30; % polymerization
+% v2   = 40; % depolymerization
+% fcat = 3; % catastrophe
+% fres = 1; % rescue
+% rs = [0.5]*fcat;
+
+v1   = 1; v2   = 1; fcat = 1; fres = 1;
+rs = [0.1:0.1:1.0]*fcat;
 
 J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
