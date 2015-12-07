@@ -8,7 +8,7 @@ clear all;
 % rs = [0.5]*fcat;
 
 v1   = 1; v2   = 1; fcat = 1; fres = 1;
-rs = [0.1:0.1:0.3]*fcat;
+rs = [0.1:0.2:0.9]*fcat;
 
 J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
@@ -102,13 +102,15 @@ s = 2*r.^2./(1-r.^2);
 k = r-sqrt(s.^2+2*s);
 V_first  = (2*r-r.^2+sqrt(r).*r)./(sqrt(r).*(2-r)+r.^2); 
 V_second = -s./k;
+V_second2 = 2*r./(r.^2+1);
 V_tele = sqrt(4*r/2)./(1+r/2); 
 
 FigHandle = figure('Position', [500, 100, 1000, 250]);
 subplot(1,3,1); hold on;
 % plot(finers/fcat, v_KKfine, 'g', rs/fcat, v_sims, 'ro');
 % plot(r_c/fcat,0, 'b*')
-plot(finers/fcat, V_first, 'b', finers/fcat, V_second, 'r',finers/fcat, V_tele, 'g', rs/fcat, v_sims, 'ko');
+% plot(finers/fcat, V_first, 'b', finers/fcat, V_second, 'r',finers/fcat, V_tele, 'g', rs/fcat, v_sims, 'ko');
+plot(finers/fcat, V_first, 'b', finers/fcat, V_second, 'r', rs/fcat, v_sims, 'ko');
 axis([0 1 0 1]);
 
 subplot(1,3,2); hold on;

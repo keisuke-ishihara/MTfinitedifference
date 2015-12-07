@@ -23,7 +23,7 @@ initpoprange = 10;
 % moretime = 3;
 % maxtime = 20;
 
-dt = 0.05/max([r fcat fres]) % discretization of time
+dt = 0.05/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -32,7 +32,7 @@ xmin = 0;
 % xmax = max([400/v1*v_theor, 160]);
 % xmax = prefixedtime*v_theor+2*initpoprange;
 
-prefixedtime = 160; xmax=120;
+prefixedtime = 90; xmax=120;
 x_init = xmin:dx:xmax;
 m = length(x_init); x = x_init;
 
