@@ -32,7 +32,12 @@ xmin = 0;
 % xmax = max([400/v1*v_theor, 160]);
 % xmax = prefixedtime*v_theor+2*initpoprange;
 
-prefixedtime = 90; xmax=120;
+% if r > 2.1
+    prefixedtime = 16; xmax=500;
+% else
+%     prefixedtime = 100; xmax = 500;
+% end
+
 x_init = xmin:dx:xmax;
 m = length(x_init); x = x_init;
 
