@@ -1,5 +1,4 @@
 clear all;
-close all;
 
 v1   = 30; % polymerization
 v2   = 40; % depolymerization
@@ -9,7 +8,7 @@ fres = 1; % rescue
 % rs = [0.3 0.6 0.7 0.8]*fcat;
 % rs = [0:0.1:0.6 0.65 0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9:0.1:1.3]*fcat;
 % rs = [0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9 1 1.2]*fcat;
-rs = [1.0 2.5];
+rs = [3.0];
 
 
 rcnew = fcat-v1/v2*fres;
