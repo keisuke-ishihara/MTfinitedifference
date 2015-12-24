@@ -39,19 +39,49 @@ a = a2; b = b2;
 count = [sum(sum(p))+sum(sum(q))];
 for j = 2:n
         
+%     %  translation by advection     
+%     p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
+%     reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
+%     for k = 1:a
+%         p(k,k) = reb/a;
+%     end
+%     q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
+%     
+%     % growth <-> shrink interconversion
+%     dp = -fcat*p*dt+fres*q*dt;
+%     dq = +fcat*p*dt-fres*q*dt;
+%     p = p+dp;
+%     q = q+dq;
+%      
+%     % nucleation of growing plus ends, radial geometry
+%     if dim == 1
+%         grw_norm = sum(p,2)/dx;
+%     elseif dim == 2
+%         grw_norm = sum(p,2)./(2*pi*x*dx)';
+%         stop
+%     else
+%         stop
+%     end
+%     
+% %     nuc = r*sum(p,2)*dt;
+%     nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+% %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
+%     p(:,1) = p(:,1) + nuc;
+%     
+% %     p = p+dp;
+% %     q = q+dq;
+            
     %  translation by advection     
-    p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
+    newp = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
     reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
     for k = 1:a
-        p(k,k) = reb/a;
+        newp(k,k) = reb/a;
     end
-    q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
+    newq = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
     
     % growth <-> shrink interconversion
-    dp = -fcat*p*dt+fres*q*dt;
-    dq = +fcat*p*dt-fres*q*dt;
-    p = p+dp;
-    q = q+dq;
+    newp = -fcat*p*dt+fres*q*dt;
+    newq = +fcat*p*dt-fres*q*dt;
      
     % nucleation of growing plus ends, radial geometry
     if dim == 1
@@ -65,12 +95,11 @@ for j = 2:n
     
 %     nuc = r*sum(p,2)*dt;
     nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
-%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
-    p(:,1) = p(:,1) + nuc;
+%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
+    newp(:,1) = newp(:,1) + nuc;
     
-%     p = p+dp;
-%     q = q+dq;
-            
+    p = newp; q= newq;
+
     % update time
     curr_time = curr_time + dt;
     

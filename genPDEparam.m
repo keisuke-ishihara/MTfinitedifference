@@ -1,4 +1,4 @@
-dirname = 'test6';
+dirname = 'test7';
 
 old = pwd();
 
@@ -27,7 +27,7 @@ for i = 1:length(variation)
     cd(dirname);
     
     global tmax xmax dtfactor dim;
-    dtfactor = 0.04;
+    dtfactor = 0.05;
     dim = 1;
     
     tmax = 16;

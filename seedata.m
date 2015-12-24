@@ -1,10 +1,10 @@
 clear all;
 
-datapath1 ='test3/';
+datapath1 ='test7/';
 datapath = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
 
 
-nsim = 12;
+nsim = 16;
 
 filename = strcat(datapath, 'param', num2str(nsim), '_out/PDEresult.mat');
 
