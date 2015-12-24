@@ -26,6 +26,8 @@ dx = gcd(v1,v2)*dt;
 
 xmin = 0;
 
+% prefixedtime = tmax;
+
 x_init = xmin:dx:xmax;
 m = length(x_init); x = x_init;
 
@@ -50,7 +52,7 @@ sumgrw = sum(p0,2); tpoints = 0;
 
 % first simulation with pre-fixed time
 p = p0; q = q0;
-[p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sumgrw, tpoints);
+[p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, tmax, sumgrw, tpoints);
 
 
 % while curr_time < maxtime
