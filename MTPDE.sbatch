@@ -6,7 +6,7 @@
 #SBATCH -n 1 # one core
 #SBATCH -N 1 # on one node
 #SBATCH -t 0-10:00 # Running time of 10 hours
-#SBATCH --mem 1500 # Memory request of 1.5 GB
+#SBATCH --mem 3200 # Memory request of 3.2 GB
 #SBATCH -o slurm_%A_%a.out # Standard output
 #SBATCH -e slurm_%A_%a.err # Standard error
 
