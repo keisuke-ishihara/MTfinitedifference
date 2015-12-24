@@ -2,7 +2,7 @@
 
 clear all; clc;
 
-datapath1 ='test7/';
+datapath1 ='test8/';
 % datapath = strcat('~/Documents/github/KorolevGroup/MT1Dstochastic/experiments/',datapath1);
 datapath = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
 % datapath = strcat(fileparts(pwd),'/experiments_MT1Dstoch/20150330_1/param1_out/');
@@ -33,8 +33,8 @@ V_sims = zeros(1,n);
 Js = zeros(1,n);
 rs = zeros(1,n);
 
-% for k = 1:n
-for k = [2:8 10:n]
+for k = 1:n
+% for k = [2:8 10:n]
 
     filename = strcat(datapath, subFolders(k).name, '/PDEresultsummary.txt');
     data = dlmread(filename);
@@ -60,7 +60,7 @@ for i = 1:length(rfine)
     V_theo(i) = v_theoretical;
 end
 
-figure(1); hold on
+figure(2); hold on
 plot(rs, V_sims, 'bo')
 plot(rfine,V_theo, 'b')
 plot(r_critical, v_gap, 'r*')

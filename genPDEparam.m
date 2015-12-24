@@ -1,4 +1,4 @@
-dirname = 'test7';
+dirname = 'test8';
 
 old = pwd();
 

@@ -72,16 +72,16 @@ for j = 2:n
 % %     q = q+dq;
             
     %  translation by advection     
-    newp = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
+    p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
     reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
     for k = 1:a
-        newp(k,k) = reb/a;
+        p(k,k) = reb/a;
     end
-    newq = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
+    q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
     
     % growth <-> shrink interconversion
-    newp = -fcat*p*dt+fres*q*dt;
-    newq = +fcat*p*dt-fres*q*dt;
+    dp = -fcat*p*dt+fres*q*dt;
+    dq = +fcat*p*dt-fres*q*dt;
      
     % nucleation of growing plus ends, radial geometry
     if dim == 1
@@ -96,9 +96,10 @@ for j = 2:n
 %     nuc = r*sum(p,2)*dt;
     nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
 %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
-    newp(:,1) = newp(:,1) + nuc;
+    dp(:,1) = dp(:,1) + nuc;
     
-    p = newp; q= newq;
+    p = p+dp;
+    q = q+dq;
 
     % update time
     curr_time = curr_time + dt;
