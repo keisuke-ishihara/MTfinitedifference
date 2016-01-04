@@ -14,7 +14,6 @@ n_chomp = 5;  % n_store > 2*n_chomp recommended?
 
 [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
 
-prefixedtime = 16;
 initpoprange = 10;
 % if r>r_c
 %     prefixedtime = prefixedtime + 10/(r-r_c);
@@ -23,7 +22,7 @@ initpoprange = 10;
 % moretime = 3;
 % maxtime = 20;
 
-dt = 0.05/max([r fcat fres]); % discretization of time
+dt = 0.08/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;

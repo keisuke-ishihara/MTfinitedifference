@@ -2,7 +2,7 @@
 
 clear all; clc;
 
-datapath1 ='test11/';
+datapath1 ='test8/';
 % datapath = strcat('~/Documents/github/KorolevGroup/MT1Dstochastic/experiments/',datapath1);
 datapath = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
 % datapath = strcat(fileparts(pwd),'/experiments_MT1Dstoch/20150330_1/param1_out/');
@@ -60,7 +60,7 @@ for i = 1:length(rfine)
     V_theo(i) = v_theoretical;
 end
 
-figure(8); hold on
+figure; hold on
 plot(rs, V_sims, 'go')
 plot(rfine,V_theo, 'b')
 plot(r_critical, v_gap, 'r*')
