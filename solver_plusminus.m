@@ -29,6 +29,9 @@ a1 = v1*dt/dx; a2 = fix(a1); [a1 a2]
 b1 = v2*dt/dx; b2 = fix(b1); [b1 b2]
 a = a2; b = b2; 
 
+a = 3; b = 4;
+
+
 % pflux = zeros(m,1);
 % for i = 1:m;
 %     if (x(i)<= 5 && x(i)>=-5)

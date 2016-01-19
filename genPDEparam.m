@@ -1,5 +1,6 @@
-dirname = 'test12';
+clear all;
 
+dirname = 'blas';
 old = pwd();
 
 cd experimentsPDE
@@ -11,7 +12,9 @@ end
 mkdir(dirname);
 cd(dirname);
 
-variation = [0:0.4:1.6 2:0.05:2.4 2.5:0.3:3.4];
+% variation = [0.25 0.1 0.05 0.02];
+variation = [1 4 16 64 128];
+% variation = [0:0.4:1.6 2:0.05:2.4 2.5:0.3:3.4];
 % variation = [0:1:3];
 
 for i = 1:length(variation)
@@ -19,7 +22,8 @@ for i = 1:length(variation)
     global v1 v2 fcat fres r
     v1   = 30;   v2   = 40; 
     fcat = 3;    fres = 1;
-    r = variation(i);        % rate of nucleation
+%     r = variation(i);        % rate of nucleation
+    r = 0;
     
     cd(old);
     [r_c, v_theor, J, v_gap] = theoreticalnewpole(v1,v2,fcat,fres,r);
@@ -27,11 +31,13 @@ for i = 1:length(variation)
     cd(dirname);
     
     global tmax xmax dtfactor dim;
-    dtfactor = 0.05;
+    dtfactor = 0.25;
     dim = 1;
+
+%     dtfactor = variation(i);
     
-    tmax = 16;
-    xmax = 500;
+    tmax = 10*variation(i);
+    xmax = 50*variation(i);
     
 %       
 %     if r > r_c

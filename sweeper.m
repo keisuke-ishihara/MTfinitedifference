@@ -2,14 +2,14 @@ clear all;
 
 v1   = 30; % polymerization
 v2   = 40; % depolymerization
-fcat = 3; % catastrophe
+fcat = 3.3; % catastrophe
 fres = 1; % rescue
 % rs = [.9]*fcat;
 % rs = [0.3 0.6 0.7 0.8]*fcat;
 % rs = [0:0.1:0.6 0.65 0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9:0.1:1.3]*fcat;
 % rs = [0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9 1 1.2]*fcat;
-rs = [2.8];
-
+% rs = [1.0 2.8];
+rs = [2.7];
 
 rcnew = fcat-v1/v2*fres;
 
@@ -28,7 +28,7 @@ for i = 1:length(rs)
     
     r = rs(i);
     
-    [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
+    [r_c, v_theor, J] = theoreticalnewpole(v1,v2,fcat,fres,r);
     [x, tpoints, sump, p, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim);
 %     [x, tpoints, sump, p, q, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
     
@@ -65,7 +65,7 @@ end
 % finers = linspace(0,max(rs),1000);
 % v_KKfine = zeros(1,length(finers));
 % for i = 1:length(finers)    
-%     [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,finers(i));
+%     [r_c, v_theor, J] = theoreticalnewpole(v1,v2,fcat,fres,finers(i));
 %     v_KKfine(1,i) = v_theor;
 % end
 % 
@@ -93,7 +93,7 @@ figure('Position', [100, 10, 300, 250]); plot(x,log(sum(p,2)), x,log(smooth(sum(
 finers = linspace(0,1.2*fcat,1000);
 v_KKfine = zeros(1,length(finers));
 for i = 1:length(finers)    
-    [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,finers(i));
+    [r_c, v_theor, J] = theoreticalnewpole(v1,v2,fcat,fres,finers(i));
     v_KKfine(1,i) = v_theor;
 end
    

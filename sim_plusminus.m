@@ -22,7 +22,7 @@ initpoprange = 10;
 % moretime = 3;
 % maxtime = 20;
 
-dt = 0.08/max([r fcat fres]); % discretization of time
+dt = 0.04/max([r fcat fres]); % discretization of time
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -33,6 +33,7 @@ xmin = 0;
 
 % if r > 2.1
     prefixedtime = 16; xmax=500;
+%     prefixedtime = 32; xmax=1000;
 % else
 %     prefixedtime = 100; xmax = 500;
 % end
@@ -61,7 +62,7 @@ sumgrw = sum(p0,2); tpoints = 0;
 
 % first simulation with pre-fixed time
 p = p0; q = q0;
-[p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sumgrw, tpoints);
+[p, q, curr_time, sumgrw, tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sumgrw, tpoints);
 
 
 % while curr_time < maxtime

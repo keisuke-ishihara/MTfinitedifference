@@ -2,7 +2,7 @@
 
 clear all; clc;
 
-datapath1 ='test8/';
+datapath1 ='test11/';
 % datapath = strcat('~/Documents/github/KorolevGroup/MT1Dstochastic/experiments/',datapath1);
 datapath = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
 % datapath = strcat(fileparts(pwd),'/experiments_MT1Dstoch/20150330_1/param1_out/');
