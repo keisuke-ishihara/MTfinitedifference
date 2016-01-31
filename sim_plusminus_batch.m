@@ -1,4 +1,4 @@
-function [x, tpoints, sumgrw, p, q, v_sim] = sim_plusminus_batch(v1,v2,fcat,fres,r,tmax,xmax,dtfactor,dim)
+function [x, tpoints, sumgrw, p, q] = sim_plusminus_batch(v1,v2,fcat,fres,r,tmax,xmax,dtfactor,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
 % only accounts for plus end
 %
@@ -101,8 +101,9 @@ p = p0; q = q0;
 %     
 % end
 
-va = extractV(x, tpoints, sumgrw, dim, n_chomp);
-v_sim = va;
+% extractV(x, tpoints, sumgrw, dim, n, carry, curr_ratio);
+% va = extractV(x, tpoints, sumgrw, dim, n_chomp, carry, curr_ratio);
+% v_sim = va;
 
 
 end

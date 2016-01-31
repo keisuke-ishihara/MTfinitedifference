@@ -27,6 +27,8 @@ if J < 0
             v_theoretical = v1; % when r >= fcat
         end
         
+    elseif r == r_critical
+        v_theoretical = v_gap;
     else
         v_theoretical = 0; % when 0 < r < r_c
     end

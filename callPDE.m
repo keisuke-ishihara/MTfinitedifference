@@ -10,7 +10,8 @@ old = cd(scriptdir);
 
 % call simulation
 tic;
-[x, tpoints, sumgrw, p, q, v_sim] = sim_plusminus_batch(v1,v2,fcat,fres,r,tmax,xmax,dtfactor,dim);
+% [x, tpoints, sumgrw, p, q, v_sim] = sim_plusminus_batch(v1,v2,fcat,fres,r,tmax,xmax,dtfactor,dim);
+[x, tpoints, sumgrw, p, q] = sim_plusminus_batch(v1,v2,fcat,fres,r,tmax,xmax,dtfactor,dim);
 toc
 
 % save the results in the same directory as the param.mat file
@@ -18,8 +19,8 @@ cd(old);
 filename = strcat('PDEresult.mat');
 save(filename);
 
-% append nucleation and v_sim in txt file
-dlmwrite('PDEresultsummary.txt',[v1,v2,fcat,fres,r,tmax,xmax,dtfactor,dim,v_sim],'delimiter','\t','precision',4)
+% % append nucleation and v_sim in txt file
+% dlmwrite('PDEresultsummary.txt',[v1,v2,fcat,fres,r,tmax,xmax,dtfactor,dim,v_sim],'delimiter','\t','precision',4)
 
 
 % save final plot
