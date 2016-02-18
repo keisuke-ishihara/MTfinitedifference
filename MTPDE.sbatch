@@ -5,8 +5,8 @@
 #SBATCH -p serial_requeue # Partition
 #SBATCH -n 1 # one core
 #SBATCH -N 1 # on one node
-#SBATCH -t 0-24:00 # Running time of 24 hours
-#SBATCH --mem 4000 # Memory request of 4.0 GB
+#SBATCH -t 2-0:00 # Running time of 2 days
+#SBATCH --mem 12000 # Memory request of 12.0 GB
 #SBATCH -o slurm_%A_%a.out # Standard output
 #SBATCH -e slurm_%A_%a.err # Standard error
 

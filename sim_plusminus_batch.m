@@ -20,6 +20,7 @@ initpoprange = 10;
 % maxtime = 20;
 
 dt = dtfactor/max([r fcat fres]); % discretization of time
+dt = single(dt);
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -35,7 +36,8 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
 %% initial condition
 
-p0 = zeros(m,m); q0 = zeros(m,m);
+p0 = zeros(m,m,'single'); q0 = zeros(m,m,'single');
+% p0 = zeros(m,m); q0 = zeros(m,m);
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
         p0(i,i) = .2*cap*dx;
@@ -52,6 +54,7 @@ sumgrw = sum(p0,2); tpoints = 0;
 
 % first simulation with pre-fixed time
 p = p0; q = q0;
+
 [p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, tmax, sumgrw, tpoints);
 
 
