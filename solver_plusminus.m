@@ -27,9 +27,7 @@ m = length(x);
 
 a1 = v1*dt/dx; a2 = fix(a1); [a1 a2]
 b1 = v2*dt/dx; b2 = fix(b1); [b1 b2]
-a = a2; b = b2; 
-
-a = 3; b = 4;
+a = a2; b = b2;
 
 
 % pflux = zeros(m,1);

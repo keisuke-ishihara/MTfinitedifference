@@ -1,8 +1,8 @@
 clear all;
 
 v1   = 30; % polymerization
-v2   = 40; % depolymerization
-fcat = 3.3; % catastrophe
+v2   = 20; % depolymerization
+fcat = 3; % catastrophe
 fres = 1; % rescue
 % rs = [.9]*fcat;
 % rs = [0.3 0.6 0.7 0.8]*fcat;
@@ -29,10 +29,10 @@ for i = 1:length(rs)
     r = rs(i);
     
     [r_c, v_theor, J] = theoreticalnewpole(v1,v2,fcat,fres,r);
-    [x, tpoints, sump, p, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim);
+    [x, tpoints, sump, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim);
 %     [x, tpoints, sump, p, q, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
     
-    v_sims = [v_sims v_sim];
+%     v_sims = [v_sims v_sim];
     v_KKs = [v_KKs v_theor];
     
 %     v_Fishers = [v_Fishers sqrt(x4*(v1*v2)/(fcat+fres)*r)];

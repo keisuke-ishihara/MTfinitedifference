@@ -42,9 +42,12 @@ for i = 1:length(t)
 %     [M Imax] = max(pnow);
 %     pnow(1:Imax) = zeros(1,Imax);
     
-    if carry >= 1
+    if carry > 1
 %         hm = ratio*max(pnow);
         hm = ratio*0.25;
+    elseif carry == 1
+%         hm = ratio*max([max(pnow), 1]);
+        hm = ratio;
     elseif carry >= 0
         hm = ratio*carry;
 %         pnow(pnow>carry) = carry*ones(1,sum(pnow>carry));

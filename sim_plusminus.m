@@ -1,4 +1,4 @@
-function [x, tpoints, sumgrw, p, q, v_sim] = sim_plusminus(v1,v2,fcat,fres,r,dim)
+function [x, tpoints, sumgrw, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
 % only accounts for plus end
 %
@@ -22,7 +22,8 @@ initpoprange = 10;
 % moretime = 3;
 % maxtime = 20;
 
-dt = 0.04/max([r fcat fres]); % discretization of time
+dt = 0.1/max([r fcat fres]); % discretization of time
+dt = single(dt);
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;
@@ -111,8 +112,8 @@ p = p0; q = q0;
 %     
 % end
 
-va = extractV(x, tpoints, sumgrw, dim, n_chomp);
-v_sim = va;
+% va = extractV(x, tpoints, sumgrw, dim, n_chomp);
+% v_sim = va;
 
 
 end
