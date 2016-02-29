@@ -19,7 +19,9 @@ initpoprange = 10;
 % moretime = 3;
 % maxtime = 20;
 
-dt = dtfactor/max([r fcat fres]); % discretization of time
+hardcoderate = 3;
+
+dt = dtfactor/max([r fcat fres hardcoderate]); % discretization of time
 dt = single(dt);
 % making this smaller has a great effect on the accuracy of the simulation
 

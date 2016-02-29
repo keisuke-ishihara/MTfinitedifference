@@ -6,7 +6,7 @@
 #SBATCH -n 1 # one core
 #SBATCH -N 1 # on one node
 #SBATCH -t 3-0:00 # Running time of 3 days
-#SBATCH --mem 3500 # Memory request in MB
+#SBATCH --mem 1500 # Memory request in MB
 #SBATCH -o slurm_%A_%a.out # Standard output
 #SBATCH -e slurm_%A_%a.err # Standard error
 
@@ -18,7 +18,7 @@ cp param${SLURM_ARRAY_TASK_ID}.mat ./param${SLURM_ARRAY_TASK_ID}_out/param.mat
 cd param${SLURM_ARRAY_TASK_ID}_out
 #cp param${SLURM_ARRAY_TASK_ID}.mat ./param.mat
 
-scriptdir=`pwd |sed 's#/[^/]*/[^/]*/[^/]*$##'`  
+scriptdir=`pwd |sed 's#/[^/]*/[^/]*/[^/]*$##'` 	 
 #echo $scriptdir
 
 #module load math/matlab-R2014b 

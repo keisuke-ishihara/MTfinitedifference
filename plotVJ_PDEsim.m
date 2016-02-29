@@ -1,12 +1,14 @@
-clear all;
-close all;
+function [Js, v_sims] = plotVr_PDEsim(datapath1,sims)
 
-datapath1 ='20160222_test_VJ5/'; sims = 1:8;
+% datapath1 ='20160222_test_VJ5/'; sims = 1:8;
+% datapath1 ='20160226_test_VJ_vs40/'; sims = 1:5;
 
 datapathVr = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
 
 ratios = 10.^(-.3010:-.02:-1.301);
 v_theors = [];
+Js = [];
+v_sims = [];
 
 for i = 1:length(sims)
     
@@ -27,41 +29,45 @@ for i = 1:length(sims)
     
     pnow = sumgrw(:,100)/(x(end)-x(end-1));
     
-    figure; hold on;
-    plot(x,pnow);
-    plot(x,sumgrw(:,90)/(x(end)-x(end-1)));
-    plot(x,sumgrw(:,80)/(x(end)-x(end-1)));
-    plot(x,sumgrw(:,30)/(x(end)-x(end-1)));
-%     plot(x,sumgrw(:,60)/(x(end)-x(end-1)));
+%     figure; hold on;
+%     plot(x,pnow);
+%     plot(x,sumgrw(:,90)/(x(end)-x(end-1)));
+%     plot(x,sumgrw(:,80)/(x(end)-x(end-1)));
+%     plot(x,sumgrw(:,30)/(x(end)-x(end-1)));
     
-    figure(100); hold on;
-    plot(log10(ratios), vs, 'b');
-    xlabel('log10(thres)'); ylabel('v simu');
-    plot(log10(linspace(min(ratios),max(ratios),100)), a2*ones(100,1), 'r')
-    [J mean(vs) std(vs) std(vs)/mean(vs)]
+%     figure(100); hold on;
+%     plot(log10(ratios), vs, 'b');
+%     xlabel('log10(thres)'); ylabel('v simu');
+%     plot(log10(linspace(min(ratios),max(ratios),100)), a2*ones(100,1), 'r')
+%     [J mean(vs) std(vs) std(vs)/mean(vs)]
 
-    v_theors = [v_theors a2];
+    v_theors = [v_theors a2];   
     
-%     [v_sim] = extractV(x, tpoints, sumgrw, dim, n, 1-a1/r, 0.02);
-%     plot(r,v_sim, 'bo')
-%     plot(r,v_theor, 'r*')
+%     figure(101); hold on;
+%     plot(J,mean(vs), 'bo')
 
-    figure(101); hold on;
-    plot(J,mean(vs), 'bo')
-%     plot(r,a2, 'r*')
+    Js = [Js J];
+    v_sims = [v_sims mean(vs)];
 
 end
 
-fress = [0:0.005:0.9 0.95:0.05:1.8 2:0.2:6 6.4:0.4:9.6 10 12 15 20 25 40 70 100];
-v_theors = zeros(1,length(fress));
-Js = zeros(1,length(fress));
-for i = 1:length(fress)
-    [a1 a2 a3 a4] = theoreticalnewpole(v1,v2,fcat,fress(i),r);
-    Js(i) = a3;
-    v_theors(i) = a2;
+% [Js; v_sims]
+
 end
-figure(101); hold on;
-plot(Js,v_theors,'r')
+
+% fress = [0:0.005:0.9 0.95:0.05:1.8 2:0.2:6 6.4:0.4:9.6 10 12 15 20 25 40 70 100];
+% v_theors = zeros(1,length(fress));
+% Js = zeros(1,length(fress));
+% 
+% for i = 1:length(fress)
+%     [a1 a2 a3 a4] = theoreticalnewpole(v1,v2,fcat,fress(i),r);
+%     Js(i) = a3;
+%     v_theors(i) = a2;
+% end
+% 
+% figure(101); hold on;
+% plot(Js,v_theors,'r')
+
 % figure(102); hold on;
 % plot(fress,v_theors,'r.')
 
