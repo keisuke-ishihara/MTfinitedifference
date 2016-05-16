@@ -1,6 +1,6 @@
 clear all;
 
-dirname = '20160228_long2_VJ_vgvs30';
+dirname = '20160320_long8_vgvs30VJ';
 old = pwd();
 
 cd experimentsPDE
@@ -39,7 +39,7 @@ for i = 1:length(variation)
     dtfactor = 0.1;
     dim = 1;
     
-    tmax = 28*2; xmax = 850*2;
+    tmax = 28*8; xmax = 850*8;
 
     save(strcat('param',num2str(i),'.mat'));
 

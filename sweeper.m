@@ -1,7 +1,7 @@
-clear all;
+clear all; close all;
 
 v1   = 30; % polymerization
-v2   = 20; % depolymerization
+v2   = 40; % depolymerization
 fcat = 3; % catastrophe
 fres = 1; % rescue
 % rs = [.9]*fcat;
@@ -9,7 +9,7 @@ fres = 1; % rescue
 % rs = [0:0.1:0.6 0.65 0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9:0.1:1.3]*fcat;
 % rs = [0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9 1 1.2]*fcat;
 % rs = [1.0 2.8];
-rs = [2.7];
+rs = [1 2.5];
 
 rcnew = fcat-v1/v2*fres;
 
@@ -44,7 +44,8 @@ for i = 1:length(rs)
 %     end
 %     v_Holmes  = [v_Holmes vH];
     
-    toplot = sump(:,10:floor(end/15):end)/(x(2)-x(1));
+    toplot = sump(:,(1:10:81))/(x(2)-x(1));
+    tpoints(1:10:81)
     [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
     
     figure('Position', [500, 100, 350, 250]); hold on;
@@ -53,9 +54,13 @@ for i = 1:length(rs)
         plot(x, toplot(:,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
     end
     
-%     run tst
-    [r/fcat tpoints(end) toc]
-
+    
+    axis([0 500 0 0.25]);
+    ax = gca;
+%     ax.XTick = [-vs 0 +vg]; ax.XTickLabel = {'-v_{s}', '0', '+v_{g}'};
+    ax.YTick = [0:0.03:0.21];
+    ax.YTickLabel = {'0', '1', '2', '3', '4', '5', '6', '7'};
+    
 end
 
 % figure('Position', [100, 360, 300, 250]); plot(x,smooth(sump(:,end))/(x(2)-x(1)), x,smooth(q)/(x(2)-x(1)))
@@ -86,9 +91,9 @@ end
 
 p(:,1)=zeros(length(p),1);
 q(:,1)=zeros(length(q),1);
-figure('Position', [100, 360, 300, 250]); plot(x,sum(p,2)/(x(2)-x(1)), x,sum(q,2)/(x(2)-x(1)))
-% hold on; plot(x, (sum(p,2)+sum(q,2))/(x(2)-x(1)))
-figure('Position', [100, 10, 300, 250]); plot(x,log(sum(p,2)), x,log(smooth(sum(q,2))))
+% figure('Position', [100, 360, 300, 250]); plot(x,sum(p,2)/(x(2)-x(1)), x,sum(q,2)/(x(2)-x(1)))
+% % hold on; plot(x, (sum(p,2)+sum(q,2))/(x(2)-x(1)))
+% figure('Position', [100, 10, 300, 250]); plot(x,log(sum(p,2)), x,log(smooth(sum(q,2))))
 
 finers = linspace(0,1.2*fcat,1000);
 v_KKfine = zeros(1,length(finers));

@@ -2,7 +2,7 @@ function [Js, v_sims] = plotVr_PDEsim(datapath1,sims)
 
 % datapath1 ='20160222_test_VJ5/'; sims = 1:8;
 % datapath1 ='20160226_test_VJ_vs40/'; sims = 1:5;
-
+datapath1 = '20160305_long8_vgvs30VJ/', sims = 4:7;
 datapathVr = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
 
 ratios = 10.^(-.3010:-.02:-1.301);
@@ -14,11 +14,16 @@ for i = 1:length(sims)
     
     filename = strcat(datapathVr, 'param', num2str(sims(i)), '_out/PDEresult.mat');
     load(filename);
+    [v1 v2 fcat fres r]
     
     [a1, a2, a3, a4] = theoreticalnewpole(v1,v2,fcat,fres,r);
     n = 1;
 
     carry = 1-a1/r;
+    
+    if r == 0
+        carry = -1;
+    end
        
     vs = [];
     for j = 1:length(ratios)
@@ -29,10 +34,10 @@ for i = 1:length(sims)
     
     pnow = sumgrw(:,100)/(x(end)-x(end-1));
     
-%     figure; hold on;
-%     plot(x,pnow);
-%     plot(x,sumgrw(:,90)/(x(end)-x(end-1)));
-%     plot(x,sumgrw(:,80)/(x(end)-x(end-1)));
+    figure; hold on;
+    plot(x,pnow);
+    plot(x,sumgrw(:,90)/(x(end)-x(end-1)));
+    plot(x,sumgrw(:,80)/(x(end)-x(end-1)));
 %     plot(x,sumgrw(:,30)/(x(end)-x(end-1)));
     
 %     figure(100); hold on;

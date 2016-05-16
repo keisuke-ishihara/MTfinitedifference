@@ -6,8 +6,8 @@ function [x, tpoints, sumgrw, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim)
 %
 
 cap = 1;  % carrying capacity
-vchange_tol = 0.03; % criteria for convergence of advancing front
-n_store = 100; % how many time points to store per iteration
+vchange_tol = 0.1; % criteria for convergence of advancing front
+n_store = 80; % how many time points to store per iteration
 n_chomp = 5;  % n_store > 2*n_chomp recommended?
 
 %% decide on stepsizes of time and space
@@ -46,13 +46,10 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
 %% initial condition
 
-p0 = zeros(m,m); q0 = zeros(m,m);
+p0 = zeros(m,m, 'single'); q0 = zeros(m,m,'single');
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
-        p0(i,i) = .2*cap*dx;
-%         if i > 1
-%             p0(i,i-1) = 4*cap*dx;
-%         end
+        p0(i,i) = .21*cap*dx;
     end
 end
 

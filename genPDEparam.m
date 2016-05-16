@@ -1,6 +1,6 @@
 clear all;
 
-dirname = '20160226_long4_newvs40_unbounded';
+dirname = '20160306_long7_unbounded';
 old = pwd();
 
 cd experimentsPDE
@@ -16,15 +16,15 @@ cd(dirname);
 % variation = [0:0.5:2.0 2.4:0.2:3.2]; % for vdepoly=40 cases
 
 % variation = [0:0.4:3.2];
-% variation = [0:0.4:1.2, 1.7, 2.05, 2.4:0.4:3.2];
-variation = [0:0.1333:1.1];
+variation = [0:0.4:1.2, 1.7, 2.05, 2.4:0.4:3.2];
+% variation = [0:0.1333:1.1];
 
 
 for i = 1:length(variation)
    
     global v1 v2 fcat fres r
-    v1   = 30;   v2   = 40; 
-    fcat = 1;    fres = 2;
+    v1   = 30;   v2   = 15; 
+    fcat = 3;    fres = 3;
     r = variation(i);        % rate of nucleation
 %     r = 0;
         
@@ -37,7 +37,7 @@ for i = 1:length(variation)
     dtfactor = 0.1 ;
     dim = 1;
     
-    tmax = 28*4; xmax = 850*4;
+    tmax = 28*7; xmax = 820*7;
 
 %     dtfactor = variation(i);
 %     tmax = 10*variation(i);
