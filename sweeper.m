@@ -1,15 +1,17 @@
 clear all; close all;
 
+% v1   = 30; % polymerization
+% v2   = 40; % depolymerization
+% fcat = 3; % catastrophe
+% fres = 1; % rescue
+% rs = [1 2.5];
+
 v1   = 30; % polymerization
-v2   = 40; % depolymerization
+v2   = 15; % depolymerization
 fcat = 3; % catastrophe
-fres = 1; % rescue
-% rs = [.9]*fcat;
-% rs = [0.3 0.6 0.7 0.8]*fcat;
-% rs = [0:0.1:0.6 0.65 0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9:0.1:1.3]*fcat;
-% rs = [0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.9 1 1.2]*fcat;
-% rs = [1.0 2.8];
-rs = [1 2.5];
+fres = 3; % rescue
+rs = [1];
+
 
 rcnew = fcat-v1/v2*fres;
 
@@ -55,11 +57,11 @@ for i = 1:length(rs)
     end
     
     
-    axis([0 500 0 0.25]);
+    axis([0 max(x) 0 1.1*(max(sump(:,1)/(x(2)-x(1))))]);
     ax = gca;
 %     ax.XTick = [-vs 0 +vg]; ax.XTickLabel = {'-v_{s}', '0', '+v_{g}'};
-    ax.YTick = [0:0.03:0.21];
-    ax.YTickLabel = {'0', '1', '2', '3', '4', '5', '6', '7'};
+%     ax.YTick = [0:0.03:0.21];
+%     ax.YTickLabel = {'0', '1', '2', '3', '4', '5', '6', '7'};
     
 end
 

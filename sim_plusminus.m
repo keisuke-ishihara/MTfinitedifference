@@ -33,8 +33,8 @@ xmin = 0;
 % xmax = prefixedtime*v_theor+2*initpoprange;
 
 % if r > 2.1
+%     prefixedtime = 16; xmax=500;
     prefixedtime = 16; xmax=500;
-%     prefixedtime = 32; xmax=1000;
 % else
 %     prefixedtime = 100; xmax = 500;
 % end
@@ -49,8 +49,10 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 p0 = zeros(m,m, 'single'); q0 = zeros(m,m,'single');
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
-        p0(i,i) = .21*cap*dx;
+        p0(i,i) = 1*cap*dx;
     end
+%         p0(i,i) = .21*cap*dx;
+
 end
 
 curr_time = 0;

@@ -1,6 +1,6 @@
 clear all;
 
-dirname = '20160306_long7_unbounded';
+dirname = '20160518_fcatreg_test_unbounded';
 old = pwd();
 
 cd experimentsPDE
@@ -16,8 +16,10 @@ cd(dirname);
 % variation = [0:0.5:2.0 2.4:0.2:3.2]; % for vdepoly=40 cases
 
 % variation = [0:0.4:3.2];
-variation = [0:0.4:1.2, 1.7, 2.05, 2.4:0.4:3.2];
+variation = [0:0.4:1.2, 1.7, 2.05, 2.4:0.4:3.2]; % this was used for long7
 % variation = [0:0.1333:1.1];
+
+variation = [0:0.4:1.2, 1.7, 2.05, 2.4:0.4:3.2]; % use same for fcat reg
 
 
 for i = 1:length(variation)
@@ -37,7 +39,8 @@ for i = 1:length(variation)
     dtfactor = 0.1 ;
     dim = 1;
     
-    tmax = 28*7; xmax = 820*7;
+    tmax = 28*2; xmax = 820*2;
+%     tmax = 28*7; xmax = 820*7;
 
 %     dtfactor = variation(i);
 %     tmax = 10*variation(i);

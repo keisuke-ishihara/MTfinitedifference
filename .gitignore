@@ -3,3 +3,5 @@
 *.eps
 *.png
 experimentsPDE/
+
+*.fig

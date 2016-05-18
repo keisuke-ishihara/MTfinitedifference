@@ -39,20 +39,18 @@ a = a2; b = b2;
 
 count = [sum(sum(p))+sum(sum(q))];
 for j = 2:n
-        
-%     %  translation by advection     
-%     p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
-%     reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
-%     for k = 1:a
-%         p(k,k) = reb/a;
-%     end
-%     q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
-%     
+                    
+    %  translation by advection     
+    p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
+    reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
+    for k = 1:a
+        p(k,k) = reb/a;
+    end
+    q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
+    
 %     % growth <-> shrink interconversion
 %     dp = -fcat*p*dt+fres*q*dt;
 %     dq = +fcat*p*dt-fres*q*dt;
-%     p = p+dp;
-%     q = q+dq;
 %      
 %     % nucleation of growing plus ends, radial geometry
 %     if dim == 1
@@ -65,25 +63,14 @@ for j = 2:n
 %     end
 %     
 % %     nuc = r*sum(p,2)*dt;
-%     nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
-% %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
-%     p(:,1) = p(:,1) + nuc;
+%       nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+% %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
+%     dp(:,1) = dp(:,1) + nuc;
 %     
-% %     p = p+dp;
-% %     q = q+dq;
-            
-    %  translation by advection     
-    p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
-    reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
-    for k = 1:a
-        p(k,k) = reb/a;
-    end
-    q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
-    
-    % growth <-> shrink interconversion
-    dp = -fcat*p*dt+fres*q*dt;
-    dq = +fcat*p*dt-fres*q*dt;
-     
+%     p = p+dp;
+%     q = q+dq;
+
+    % regulation of fcat scenario
     % nucleation of growing plus ends, radial geometry
     if dim == 1
         grw_norm = sum(p,2)/dx;
@@ -94,14 +81,21 @@ for j = 2:n
         stop
     end
     
-%     nuc = r*sum(p,2)*dt;
-      nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+    % growth <-> shrink interconversion with spatial regulation of fcat
+    fcatspatial = fcat*(1+grw_norm/cap);
+    fcatspatial = repmat(fcatspatial,1,m);
+    dp = -fcatspatial.*p*dt+fres*q*dt;
+    dq = +fcatspatial.*p*dt-fres*q*dt;
+    
+    nuc = r*sum(p,2)*dt;
+%       nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
 %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
     dp(:,1) = dp(:,1) + nuc;
     
     p = p+dp;
     q = q+dq;
-
+    
+    
     % update time
     curr_time = curr_time + dt;
     
