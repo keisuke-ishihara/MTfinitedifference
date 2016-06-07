@@ -1,16 +1,17 @@
 clear all; close all;
 
+v1   = 30; % polymerization
+v2   = 40; % depolymerization
+fcat = 3; % catastrophe
+fres = 1; % rescue
+% rs = [1 2.5];
+rs = [2.5];
+
 % v1   = 30; % polymerization
-% v2   = 40; % depolymerization
+% v2   = 15; % depolymerization
 % fcat = 3; % catastrophe
 % fres = 1; % rescue
-% rs = [1 2.5];
-
-v1   = 30; % polymerization
-v2   = 15; % depolymerization
-fcat = 3; % catastrophe
-fres = 3; % rescue
-rs = [1];
+% rs = [2.5];
 
 
 rcnew = fcat-v1/v2*fres;

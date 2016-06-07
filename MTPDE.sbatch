@@ -6,7 +6,7 @@
 #SBATCH -n 1 # one core
 #SBATCH -N 1 # on one node
 #SBATCH -t 3-0:00 # Running time of 3 days
-#SBATCH --mem 2000 # Memory request in MB
+#SBATCH --mem 4100 # Memory request in MB
 #SBATCH -o slurm_%A_%a.out # Standard output
 #SBATCH -e slurm_%A_%a.err # Standard error
 

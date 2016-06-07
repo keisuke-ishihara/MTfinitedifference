@@ -1,6 +1,6 @@
 clear all;
 
-dirname = '20160518_fcatreg_test_unbounded';
+dirname = '20160518_fcatreg_long7_unbounded';
 old = pwd();
 
 cd experimentsPDE
@@ -39,7 +39,7 @@ for i = 1:length(variation)
     dtfactor = 0.1 ;
     dim = 1;
     
-    tmax = 28*2; xmax = 820*2;
+    tmax = 28*7; xmax = 820*7;
 %     tmax = 28*7; xmax = 820*7;
 
 %     dtfactor = variation(i);
