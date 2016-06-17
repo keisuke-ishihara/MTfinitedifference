@@ -1,4 +1,4 @@
-clear all; close all;
+clear all; close all; clc;
 
 v1   = 30; % polymerization
 v2   = 40; % depolymerization
@@ -23,7 +23,7 @@ J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
 meanlength = -D/J;
 
-dim  = 1;  % dimension of system
+dim  = 2;  % dimension of system
 
 tic
 v_Fishers = []; v_Holmes = []; v_sims = []; v_KKs = [];
@@ -47,18 +47,38 @@ for i = 1:length(rs)
 %     end
 %     v_Holmes  = [v_Holmes vH];
     
-    toplot = sump(:,(1:10:81))/(x(2)-x(1));
-    tpoints(1:10:81)
-    [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
+    dx = x(2)-x(1);
     
-    figure('Position', [500, 100, 350, 250]); hold on;
-    plot(x, sump(:,1)/(x(2)-x(1)), 'Color', grad(1,:), 'linewidth',1.2);
+    if dim == 1
+        
+        toplot = sump(:,(1:10:81))/dx;
+        [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
+    
+        figure('Position', [500, 100, 350, 250]); hold on;
+        plot(x, sump(:,1)/dx, 'Color', grad(1,:), 'linewidth',1.2);
+        
+    elseif dim == 2
+        
+        xindex = sum(x<30);
+        
+        toplot = sump(:,(1:10:81))./repmat((2*pi*(x+dx)*dx)',1,9);
+        [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
+
+        figure('Position', [500, 100, 350, 250]); hold on;
+        % plot initial condition
+%         plot(x, sump(:,1)./(2*pi*(x+dx)*dx)', 'Color', grad(1,:), 'linewidth',1.2);
+        
+    else
+        stop
+    end
+    
     for imat = 1:min(size(toplot))
-        plot(x, toplot(:,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
+%         plot(x, toplot(:,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
+        plot(x(xindex:end), toplot(xindex:end,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
     end
     
     
-    axis([0 max(x) 0 1.1*(max(sump(:,1)/(x(2)-x(1))))]);
+%     axis([0 max(x) 0 1.1*(max(sump(:,1)/(x(2)-x(1))))]);
     ax = gca;
 %     ax.XTick = [-vs 0 +vg]; ax.XTickLabel = {'-v_{s}', '0', '+v_{g}'};
 %     ax.YTick = [0:0.03:0.21];

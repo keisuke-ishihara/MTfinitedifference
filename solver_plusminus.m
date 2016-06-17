@@ -39,7 +39,7 @@ a = a2; b = b2;
 
 count = [sum(sum(p))+sum(sum(q))];
 for j = 2:n
-                    
+
     %  translation by advection     
     p = [zeros(a,a) zeros(a,m-a); zeros(m-a,a) p(1:(m-a),1:(m-a))];
     reb = trace(q(1:b,1:b)); % only MTs with minusend at origin renucleate
@@ -47,53 +47,52 @@ for j = 2:n
         p(k,k) = reb/a;
     end
     q = [q(b+1:m,b+1:m) zeros(m-b,b); zeros(b,m-b) zeros(b,b)];
-    
-%     % growth <-> shrink interconversion
-%     dp = -fcat*p*dt+fres*q*dt;
-%     dq = +fcat*p*dt-fres*q*dt;
-%      
-%     % nucleation of growing plus ends, radial geometry
-%     if dim == 1
-%         grw_norm = sum(p,2)/dx;
-%     elseif dim == 2
-%         grw_norm = sum(p,2)./(2*pi*x*dx)';
-%         stop
-%     else
-%         stop
-%     end
-%     
-% %     nuc = r*sum(p,2)*dt;
-%       nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
-% %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
-%     dp(:,1) = dp(:,1) + nuc;
-%     
-%     p = p+dp;
-%     q = q+dq;
-
-    % regulation of fcat scenario
+        
+    % growth <-> shrink interconversion
+    dp = -fcat*p*dt+fres*q*dt;
+    dq = +fcat*p*dt-fres*q*dt;
+     
     % nucleation of growing plus ends, radial geometry
     if dim == 1
         grw_norm = sum(p,2)/dx;
     elseif dim == 2
-        grw_norm = sum(p,2)./(2*pi*x*dx)';
-        stop
+        grw_norm = sum(p,2)./(2*pi*(x+dx)*dx)';
     else
         stop
     end
     
-    % growth <-> shrink interconversion with spatial regulation of fcat
-    fcatspatial = fcat*(1+grw_norm/cap);
-    fcatspatial = repmat(fcatspatial,1,m);
-    dp = -fcatspatial.*p*dt+fres*q*dt;
-    dq = +fcatspatial.*p*dt-fres*q*dt;
-    
-    nuc = r*sum(p,2)*dt;
-%       nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+%     nuc = r*sum(p,2)*dt;
+      nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+     
 %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
     dp(:,1) = dp(:,1) + nuc;
     
     p = p+dp;
     q = q+dq;
+        
+%     % regulation of fcat scenario
+%     % nucleation of growing plus ends, radial geometry
+%     if dim == 1
+%         grw_norm = sum(p,2)/dx;
+%     elseif dim == 2
+%         grw_norm = sum(p,2)./(2*pi*(x+dx)*dx)';
+%     else
+%         stop
+%     end
+%     
+%     % growth <-> shrink interconversion with spatial regulation of fcat
+%     fcatspatial = fcat*(1+grw_norm/cap);
+%     fcatspatial = repmat(fcatspatial,1,m);
+%     dp = -fcatspatial.*p*dt+fres*q*dt;
+%     dq = +fcatspatial.*p*dt-fres*q*dt;
+%     
+%     nuc = r*sum(p,2)*dt;
+% %       nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+% %     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
+%     dp(:,1) = dp(:,1) + nuc;
+%     
+%     p = p+dp;
+%     q = q+dq;
     
     
     % update time
