@@ -38,8 +38,9 @@ params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 p0 = zeros(m,m, 'single'); q0 = zeros(m,m,'single');
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
-%         p0(i,i) = 1*cap*dx;
-        p0(i,i) = .01*cap*dx;
+%         p0(i,i) = .1*cap*dx; % for 1D
+%         p0(i,i) = .01*cap*dx; % for 2D
+        p0(i,i) = .001*cap*dx; % for 3D
     end
 %         p0(i,i) = .21*cap*dx;
 

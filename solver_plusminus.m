@@ -57,6 +57,8 @@ for j = 2:n
         grw_norm = sum(p,2)/dx;
     elseif dim == 2
         grw_norm = sum(p,2)./(2*pi*(x+dx)*dx)';
+    elseif dim == 3
+        grw_norm = sum(p,2)./(4*pi*(x+dx).^2*dx)';
     else
         stop
     end
@@ -76,6 +78,8 @@ for j = 2:n
 %         grw_norm = sum(p,2)/dx;
 %     elseif dim == 2
 %         grw_norm = sum(p,2)./(2*pi*(x+dx)*dx)';
+%     elseif dim == 3
+%         grw_norm = sum(p,2)./(4*pi*(x+dx).^2*dx)';
 %     else
 %         stop
 %     end

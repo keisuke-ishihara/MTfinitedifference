@@ -23,7 +23,7 @@ J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
 meanlength = -D/J;
 
-dim  = 2;  % dimension of system
+dim  = 3;  % dimension of system
 
 tic
 v_Fishers = []; v_Holmes = []; v_sims = []; v_KKs = [];
@@ -51,11 +51,14 @@ for i = 1:length(rs)
     
     if dim == 1
         
+        xindex = 1;
+       
         toplot = sump(:,(1:10:81))/dx;
         [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
     
         figure('Position', [500, 100, 350, 250]); hold on;
-        plot(x, sump(:,1)/dx, 'Color', grad(1,:), 'linewidth',1.2);
+        % plot initial condition
+%         plot(x, sump(:,1)/dx, 'Color', grad(1,:), 'linewidth',1.2);
         
     elseif dim == 2
         
@@ -68,6 +71,17 @@ for i = 1:length(rs)
         % plot initial condition
 %         plot(x, sump(:,1)./(2*pi*(x+dx)*dx)', 'Color', grad(1,:), 'linewidth',1.2);
         
+    elseif dim == 3
+        
+        xindex = sum(x<30);
+        
+        toplot = sump(:,(1:10:81))./repmat((4*pi*(x+dx).^2*dx)',1,9);
+        [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
+
+        figure('Position', [500, 100, 350, 250]); hold on;
+        % plot initial condition
+%         plot(x, sump(:,1)./(2*pi*(x+dx)*dx)', 'Color', grad(1,:), 'linewidth',1.2);
+
     else
         stop
     end
@@ -85,6 +99,9 @@ for i = 1:length(rs)
 %     ax.YTickLabel = {'0', '1', '2', '3', '4', '5', '6', '7'};
     
 end
+
+
+stop 
 
 % figure('Position', [100, 360, 300, 250]); plot(x,smooth(sump(:,end))/(x(2)-x(1)), x,smooth(q)/(x(2)-x(1)))
 % hold on; plot(x, (sump(:,end)+q)/(x(2)-x(1)))
