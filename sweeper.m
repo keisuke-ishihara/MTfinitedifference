@@ -1,4 +1,4 @@
-clear all; close all; clc;
+clear all; clc;
 
 v1   = 30; % polymerization
 v2   = 40; % depolymerization
@@ -23,7 +23,7 @@ J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
 meanlength = -D/J;
 
-dim  = 3;  % dimension of system
+dim = 2;  % dimension of system
 
 tic
 v_Fishers = []; v_Holmes = []; v_sims = []; v_KKs = [];
@@ -48,7 +48,9 @@ for i = 1:length(rs)
 %     v_Holmes  = [v_Holmes vH];
     
     dx = x(2)-x(1);
-    
+
+    figure('Position', [1400, 800, 350, 250]); hold on;
+
     if dim == 1
         
         xindex = 1;
@@ -56,29 +58,30 @@ for i = 1:length(rs)
         toplot = sump(:,(1:10:81))/dx;
         [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
     
-        figure('Position', [500, 100, 350, 250]); hold on;
         % plot initial condition
 %         plot(x, sump(:,1)/dx, 'Color', grad(1,:), 'linewidth',1.2);
         
     elseif dim == 2
         
-        xindex = sum(x<30);
+        xindex = sum(x<40);
+%         xindex = 1;
+        if xindex == 0
+            xindex = 1;
+        end
         
         toplot = sump(:,(1:10:81))./repmat((2*pi*(x+dx)*dx)',1,9);
         [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
 
-        figure('Position', [500, 100, 350, 250]); hold on;
         % plot initial condition
 %         plot(x, sump(:,1)./(2*pi*(x+dx)*dx)', 'Color', grad(1,:), 'linewidth',1.2);
         
     elseif dim == 3
         
-        xindex = sum(x<30);
+        xindex = sum(x<40);
         
         toplot = sump(:,(1:10:81))./repmat((4*pi*(x+dx).^2*dx)',1,9);
         [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
 
-        figure('Position', [500, 100, 350, 250]); hold on;
         % plot initial condition
 %         plot(x, sump(:,1)./(2*pi*(x+dx)*dx)', 'Color', grad(1,:), 'linewidth',1.2);
 

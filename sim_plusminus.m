@@ -1,6 +1,6 @@
 function [x, tpoints, sumgrw, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim)
 % simulates 1D advection PDE based on the non-standard method of translation
-% only accounts for plus end
+% accounts for plus and minus ends (minus end position + length)
 %
 
 cap = 1;  % carrying capacity
@@ -13,9 +13,9 @@ n_chomp = 5;  % n_store > 2*n_chomp recommended?
 [r_c, v_theor, J] = theoretical(v1,v2,fcat,fres,r);
 
 initpoprange = 10;
+r_cent = 5;
 
 dt = 0.1/max([r fcat fres]); % discretization of time
-% dt = 0.1/max([r fcat fres]); % discretization of time
 dt = single(dt);
 % making this smaller has a great effect on the accuracy of the simulation
 
@@ -25,22 +25,34 @@ xmin = 0;
 % xmax = max([400/v1*v_theor, 160]);
 % xmax = prefixedtime*v_theor+2*initpoprange;
 
-% prefixedtime = 16; xmax=500; % for dim = 1;
-prefixedtime = 18; xmax=500; % for dim = 2;
+prefixedtime = 16; xmax=490; % for dim = 1;
+% prefixedtime = 18*3; xmax=500*3; % for dim = 2;
 
 x_init = xmin:dx:xmax;
 m = length(x_init); x = x_init;
 
 params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
 
+%% add centrosome radius to length space
+
+x = x+r_cent;
+initpoprange = initpoprange + r_cent;
+
 %% initial condition
 
 p0 = zeros(m,m, 'single'); q0 = zeros(m,m,'single');
 for i = 1:m;
     if (x(i)<=initpoprange && x(i)>=-10)
-%         p0(i,i) = .1*cap*dx; % for 1D
-%         p0(i,i) = .01*cap*dx; % for 2D
-        p0(i,i) = .001*cap*dx; % for 3D
+        
+        if dim == 1
+            p0(i,i) = cap*dx;
+        elseif dim == 2
+            p0(i,i) = cap*2*pi*(x(i)+dx)*dx;
+        elseif dim == 3
+            p0(i,i) = cap*4*pi*(x(i)+dx)^2*dx;
+        else
+            stop
+        end
     end
 %         p0(i,i) = .21*cap*dx;
 
@@ -51,7 +63,7 @@ sumgrw = sum(p0,2); tpoints = 0;
 
 %% simulation
 
-% first simulation with pre-fixed time
+% simulation with pre-fixed time and length space
 p = p0; q = q0;
 [p, q, curr_time, sumgrw, tpoints] = solver_plusminus(x, p, q, params, curr_time, prefixedtime, sumgrw, tpoints);
 

@@ -51,7 +51,7 @@ for j = 2:n
     % growth <-> shrink interconversion
     dp = -fcat*p*dt+fres*q*dt;
     dq = +fcat*p*dt-fres*q*dt;
-     
+    
     % nucleation of growing plus ends, radial geometry
     if dim == 1
         grw_norm = sum(p,2)/dx;
@@ -63,10 +63,9 @@ for j = 2:n
         stop
     end
     
-%     nuc = r*sum(p,2)*dt;
-      nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
-     
-%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough    
+    nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
+
     dp(:,1) = dp(:,1) + nuc;
     
     p = p+dp;
