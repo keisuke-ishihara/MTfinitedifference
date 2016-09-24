@@ -5,3 +5,5 @@
 experimentsPDE/
 
 *.fig
+
+.DS_Store

@@ -23,7 +23,8 @@ J = (v1*fres-v2*fcat)/(fres+fcat);
 D = v1*v2/(fres+fcat);
 meanlength = -D/J;
 
-dim = 2;  % dimension of system
+dim = 1;  % dimension of system
+nucmode = 1; % mode of nucleation, 1 is plus end stim, 2 in polymer stim
 
 tic
 v_Fishers = []; v_Holmes = []; v_sims = []; v_KKs = [];
@@ -32,7 +33,7 @@ for i = 1:length(rs)
     r = rs(i);
     
     [r_c, v_theor, J] = theoreticalnewpole(v1,v2,fcat,fres,r);
-    [x, tpoints, sump, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim);
+    [x, tpoints, sump, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim,nucmode);
 %     [x, tpoints, sump, p, q, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
     
 %     v_sims = [v_sims v_sim];

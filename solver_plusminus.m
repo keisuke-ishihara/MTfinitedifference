@@ -1,7 +1,7 @@
 function [p q curr_time sumgrw tpoints] = solver_plusminus(x, p, q, params, curr_time, moretime, sumgrw, tpoints)
-%SOLVER_PLUSONLY 
+%SOLVER_PLUSMINUS 
 %
-%   solve time evolution of the system, this only accounts for plus ends
+%   solve time evolution of the system, this accounts for plus and minus ends
 %
 
 % global v1 v2 fcat fres r dim cap dt dx n_store
@@ -17,8 +17,9 @@ cap= params(7);
 dt= params(8);
 dx= params(9);
 n_store= params(10);
-% n_chomp = params();
-% vchange_tol= params();
+n_chomp = params(11);
+vchange_tol= params(12);
+nucmode= params(13);
 
 tmin = curr_time; tmax = curr_time+moretime;
 t = tmin:dt:tmax; t = t(2:end);
@@ -53,18 +54,38 @@ for j = 2:n
     dq = +fcat*p*dt-fres*q*dt;
     
     % nucleation of growing plus ends, radial geometry
-    if dim == 1
-        grw_norm = sum(p,2)/dx;
-    elseif dim == 2
-        grw_norm = sum(p,2)./(2*pi*(x+dx)*dx)';
-    elseif dim == 3
-        grw_norm = sum(p,2)./(4*pi*(x+dx).^2*dx)';
-    else
-        stop
+    if nucmode == 1
+        
+        % plus end stimulated nucleation
+        if dim == 1
+            grw_norm = sum(p,2)/dx;
+        elseif dim == 2
+            grw_norm = sum(p,2)./(2*pi*(x+dx)*dx)';
+        elseif dim == 3
+            grw_norm = sum(p,2)./(4*pi*(x+dx).^2*dx)';
+        else
+            stop
+        end
+        
+        nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
+%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
+
+    elseif nucmode == 2
+        
+        % plus end stimulated nucleation
+        if dim ==1 
+        
+            % calculate the total polymer for each spatial bin
+            
+            
+        else
+            stop
+        end
+        
+                
     end
     
-    nuc = r*sum(p,2).*(1-grw_norm/cap)*dt;
-%     nuc(nuc(:)<0) = 0; % no need to set this to zero, if timestep is small enough
+
 
     dp(:,1) = dp(:,1) + nuc;
     

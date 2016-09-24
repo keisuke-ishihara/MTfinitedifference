@@ -1,4 +1,4 @@
-function [x, tpoints, sumgrw, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim)
+function [x, tpoints, sumgrw, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim,nucmode)
 % simulates 1D advection PDE based on the non-standard method of translation
 % accounts for plus and minus ends (minus end position + length)
 %
@@ -31,7 +31,7 @@ prefixedtime = 16; xmax=490; % for dim = 1;
 x_init = xmin:dx:xmax;
 m = length(x_init); x = x_init;
 
-params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol];
+params = [v1 v2 fcat fres r dim cap dt dx n_store n_chomp vchange_tol nucmode];
 
 %% add centrosome radius to length space
 
