@@ -20,7 +20,10 @@ if strcmp(mode,'dp')
     [m n] = size(input);
     polymer = zeros(n,1);
 
-    for j = 1:n      
+    plusends = sum(input,2);
+    ind = max(find(plusends));
+    
+    for j = 1:ind    
         if j == 1
             polymer(j) = sum(diag(input));
         else
