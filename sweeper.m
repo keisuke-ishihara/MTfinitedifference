@@ -1,18 +1,20 @@
 clear all; clc;
+beep off;
+
+% close(figure(1));
 
 v1   = 30; % polymerization
-v2   = 40; % depolymerization
+v2   = 15; % depolymerization
 fcat = 3; % catastrophe
 fres = 1; % rescue
-% rs = [1 2.5];
-rs = [2.5];
+rs = [0.5 1];
+% rs = [2.5];
 
 % v1   = 30; % polymerization
 % v2   = 15; % depolymerization
 % fcat = 3; % catastrophe
 % fres = 1; % rescue
 % rs = [2.5];
-
 
 rcnew = fcat-v1/v2*fres;
 

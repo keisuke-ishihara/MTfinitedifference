@@ -76,7 +76,9 @@ for j = 2:n
         if dim ==1 
         
             % calculate the total polymer for each spatial bin
-            
+            polymer = calcpolymer(p+q,'dp')/dx; 
+            nuc = r*polymer.*(20-polymer)*dt;
+            nuc(nuc(:)<0) = 0;
             
         else
             stop
@@ -85,7 +87,11 @@ for j = 2:n
                 
     end
     
-
+    
+    if j == 10
+        figure; plot(sum(p+q,2));
+        figure; plot(calcpolymer(p+q,'dp')); stop
+    end
 
     dp(:,1) = dp(:,1) + nuc;
     
