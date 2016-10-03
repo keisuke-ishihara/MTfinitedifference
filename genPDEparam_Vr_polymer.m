@@ -1,6 +1,6 @@
 clear all;
 
-dirname = '20160518_fcatreg_long7_unbounded';
+dirname = '20161003_Vr_vgvs30_test_bounded';
 old = pwd();
 
 cd experimentsPDE
@@ -12,17 +12,16 @@ end
 mkdir(dirname);
 cd(dirname);
 
-% plus end stimulated nucleation parameters
-% % variation = [0:0.4:3.2];
-variation = [0:0.4:1.2, 1.7, 2.05, 2.4:0.4:3.2]; % this was used for long7
-% variation = [0:0.4:1.2, 1.7, 2.05, 2.4:0.4:3.2]; % use same for fcat reg
-% % variation = [0:0.5:2.0 2.4:0.2:3.2]; % for vdepoly=40 cases
+% polymer stimulated nucleation parameters
 
+%% polymer stimulated
+
+variation = [0.01:0.01:0.1 0.3:0.3:1 2 3]
 
 for i = 1:length(variation)
    
     global v1 v2 fcat fres r
-    v1   = 30;   v2   = 15; 
+    v1   = 30;   v2   = 30; 
     fcat = 3;    fres = 1;
     r = variation(i);        % rate of nucleation
 %     r = 0;
@@ -32,11 +31,12 @@ for i = 1:length(variation)
     cd('experimentsPDE');
     cd(dirname);
     
-    global tmax xmax dtfactor dim;
+    global tmax xmax dtfactor dim nucmode;
     dtfactor = 0.1 ;
-    dim = 1;
+    dim = 1;    
+    nucmode = 2;
     
-    tmax = 28*7; xmax = 820*7;
+    tmax = 26; xmax = 820;
 %     tmax = 28*7; xmax = 820*7;
 
 %     dtfactor = variation(i);

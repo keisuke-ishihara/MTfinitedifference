@@ -7,7 +7,7 @@ v1   = 30; % polymerization
 v2   = 15; % depolymerization
 fcat = 3; % catastrophe
 fres = 1; % rescue
-rs = [0.5 1];
+rs = [0.01 0.03 0.05 0.1 0.15 0.3 1];
 % rs = [2.5];
 
 % v1   = 30; % polymerization
@@ -26,7 +26,7 @@ D = v1*v2/(fres+fcat);
 meanlength = -D/J;
 
 dim = 1;  % dimension of system
-nucmode = 1; % mode of nucleation, 1 is plus end stim, 2 in polymer stim
+nucmode = 2; % mode of nucleation, 1 is plus end stim, 2 in polymer stim
 
 tic
 v_Fishers = []; v_Holmes = []; v_sims = []; v_KKs = [];

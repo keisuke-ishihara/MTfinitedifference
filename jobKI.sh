@@ -44,7 +44,7 @@ echo "We are in $(pwd)"
 echo
 
 #run the program in this line
-matlab -nojvm -nosplash -nodesktop < $scriptdir/callPDE.m
+matlab -nojvm -nosplash -nodesktop < $scriptdir/callPDE_PKS.m
 #matlab -nojvm -nosplash -nodesktop < $scriptdir/helloworld.m
 
 echo "- end of Matlab session - "
