@@ -16,6 +16,15 @@ function [rs v_sims] = plotVr_PDEsim(datapath1,sims)
 % datapath1 ='20160221_long_bounded/'; sims = 1:9;
 % datapath1 ='20160221_long_unbounded/'; sims = 1:9;
 
+
+% polymer stimulated
+datapath1 ='20161003_Vr_vgvs30_test_bounded/'; sims = 1:15;
+datapath1 ='20161004_Vr_vgvs30_test2_bounded/'; sims = 1:14;
+datapath1 ='20161004_Vr_vgvs30_test6_bounded/'; sims = 1:12;
+
+datapath1 ='20161011_Vr_vgvs30_test3_bounded/'; sims = 1:15;
+
+
 datapathVr = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
 
 % ratios = 10.^(-.7:-.01:-2);
@@ -51,26 +60,30 @@ for i = 1:length(sims)
 %     end
     
 %     carry = v1*fres/v2/fcat;
-    
     vs = [];
     for j = 1:length(ratios)
         curr_ratio = ratios(j);
         [v_sim] = extractV(x, tpoints, sumgrw, dim, n, carry, curr_ratio);
         vs = [vs, v_sim];        
     end
-    
+
     pnow = sumgrw(:,100)/(x(end)-x(end-1));
+    
 %     carry = 1-a1/r;
 %     if carry > 0
 %         pnow(pnow>carry) = carry*ones(1,sum(pnow>carry));
 %     end
     
     figure; hold on;
-    plot(x,pnow);
     plot(x,sumgrw(:,90)/(x(end)-x(end-1)));
     plot(x,sumgrw(:,80)/(x(end)-x(end-1)));
+    plot(x,sumgrw(:,70)/(x(end)-x(end-1)));  
+
+    plot(x,sumgrw(:,40)/(x(end)-x(end-1)));
     plot(x,sumgrw(:,30)/(x(end)-x(end-1)));
-%     
+    plot(x,sumgrw(:,20)/(x(end)-x(end-1)));  
+
+    
 %     figure(100); hold on;
 %     plot(log10(ratios), vs, 'b');
 %     xlabel('log10(thres)'); ylabel('v simu');
@@ -88,11 +101,29 @@ for i = 1:length(sims)
 
 end
 
+% critical rate
+p_c = (v2*fcat-v1*fres)^2/(v2*v1*(v2+v1));
+
+% ballistic rate
+p_b = (v2*fcat-v1*fres)/v2/v1*fcat;
+
+figure(101); hold on;
+plot(p_c, 0, 'r*', p_b, 0, 'b*')
+xlabel('nucleation r'); ylabel('aster velocity V')
+
+% figure; hold on;
+% plot(log(rs), v_sims, '*'); 
+% plot(log(p_c), 0, 'ro')
+% plot(log(p_b), 0, 'bo')
+% xlabel('ln(r)'); ylabel('aster velocity V')
+
 rs = linspace(0,1.2*r,1000);
 v_theors = zeros(1,length(rs));
 for i = 1:length(rs)
     [a1 a2 a3 a4] = theoreticalnewpole(v1,v2,fcat,fres,rs(i));
     v_theors(i) = a2;
 end
-figure(101); hold on;
-plot(rs,v_theors,'r')
+
+% % plot theoretical for plus end stimulated
+% figure(101); hold on;
+% plot(rs,v_theors,'r')

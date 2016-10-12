@@ -68,6 +68,7 @@ for i = 1:length(t)
 end
 
 PS = polyfit(t(end-20:end),pos(end-20:end),1);
+% PS = polyfit(t(end-5:end),pos(end-5:end),1);
 velocity = PS(1);
 
 % figure(5); hold on;

@@ -26,6 +26,7 @@ xmin = 0;
 % xmax = prefixedtime*v_theor+2*initpoprange;
 
 prefixedtime = 16; xmax=490; % for dim = 1;
+% prefixedtime = 16*4; xmax=490*3.5; % for dim = 1;
 % prefixedtime = 18*3; xmax=500*3; % for dim = 2;
 
 x_init = xmin:dx:xmax;

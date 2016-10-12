@@ -4,11 +4,11 @@ beep off;
 % close(figure(1));
 
 v1   = 30; % polymerization
-v2   = 15; % depolymerization
+v2   = 40; % depolymerization
 fcat = 3; % catastrophe
 fres = 1; % rescue
-rs = [0.01 0.03 0.05 0.1 0.15 0.3 1];
-% rs = [2.5];
+rs = [0.03 0.15];
+% rs = [1 2.5];
 
 % v1   = 30; % polymerization
 % v2   = 15; % depolymerization
@@ -34,6 +34,9 @@ for i = 1:length(rs)
     
     r = rs(i);
     
+    p_c = (v2*fcat-v1*fres)^2/(v2*v1*(v2+v1))
+    p_b = (v2*fcat-v1*fres)/v2/v1*fcat
+
     [r_c, v_theor, J] = theoreticalnewpole(v1,v2,fcat,fres,r);
     [x, tpoints, sump, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim,nucmode);
 %     [x, tpoints, sump, p, q, v_sim] = adaptivesim_plusonly(v1,v2,fcat,fres,r,dim);
@@ -53,12 +56,13 @@ for i = 1:length(rs)
     dx = x(2)-x(1);
 
     figure('Position', [1400, 800, 350, 250]); hold on;
+    [v1,v2,fcat,fres,r]
 
     if dim == 1
         
         xindex = 1;
        
-        toplot = sump(:,(1:10:81))/dx;
+        toplot = sump(:,(1:4:81))/dx;
         [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
     
         % plot initial condition
@@ -96,6 +100,8 @@ for i = 1:length(rs)
 %         plot(x, toplot(:,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
         plot(x(xindex:end), toplot(xindex:end,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
     end
+    
+%     figure; plot(calcpolymer(p+q,'dp'))
     
     
 %     axis([0 max(x) 0 1.1*(max(sump(:,1)/(x(2)-x(1))))]);

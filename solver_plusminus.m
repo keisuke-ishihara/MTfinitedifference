@@ -30,7 +30,6 @@ a1 = v1*dt/dx; a2 = fix(a1); [a1 a2]
 b1 = v2*dt/dx; b2 = fix(b1); [b1 b2]
 a = a2; b = b2;
 
-
 % pflux = zeros(m,1);
 % for i = 1:m;
 %     if (x(i)<= 5 && x(i)>=-5)
@@ -72,13 +71,14 @@ for j = 2:n
 
     elseif nucmode == 2
         
-        % plus end stimulated nucleation
+        % polymer stimulated nucleation
         if dim ==1 
         
             % calculate the total polymer for each spatial bin
             polymer = calcpolymer(p+q,'dp')/dx;
-            polymercap = 20;
+            polymercap = 30;    
             nuc = r*polymer.*(1-polymer/polymercap)*dt;
+%             nuc = r*polymer.*(1-polymer/polymercap)*dt.*(polymer>1e-6);
             nuc(nuc(:)<0) = 0;
             
         else
@@ -87,11 +87,6 @@ for j = 2:n
         
                 
     end
-    
-%     if j == 10
-%         figure; plot(sum(p+q,2));
-%         figure; plot(calcpolymer(p+q,'dp')); stop
-%     end
 
     dp(:,1) = dp(:,1) + nuc;
     

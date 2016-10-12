@@ -21,7 +21,8 @@ if strcmp(mode,'dp')
     polymer = zeros(n,1);
 
     plusends = sum(input,2);
-    ind = max(find(plusends));
+%     ind = max(find(plusends));
+    ind = max(find(plusends>1e-6));
     
     for j = 1:ind    
         if j == 1

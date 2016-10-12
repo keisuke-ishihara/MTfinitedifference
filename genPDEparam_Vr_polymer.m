@@ -1,6 +1,6 @@
 clear all;
 
-dirname = '20161003_Vr_vgvs30_test_bounded';
+dirname = '20161011_Vr_vgvs30_test3_bounded';
 old = pwd();
 
 cd experimentsPDE
@@ -16,12 +16,12 @@ cd(dirname);
 
 %% polymer stimulated
 
-variation = [0.01:0.01:0.1 0.3:0.3:1 2 3]
+variation = [0.01:0.02:0.29];
 
 for i = 1:length(variation)
    
     global v1 v2 fcat fres r
-    v1   = 30;   v2   = 30; 
+    v1   = 30;   v2   = 30;
     fcat = 3;    fres = 1;
     r = variation(i);        % rate of nucleation
 %     r = 0;
@@ -36,7 +36,7 @@ for i = 1:length(variation)
     dim = 1;    
     nucmode = 2;
     
-    tmax = 26; xmax = 820;
+    tmax = 26*3; xmax = 820*3;
 %     tmax = 28*7; xmax = 820*7;
 
 %     dtfactor = variation(i);
