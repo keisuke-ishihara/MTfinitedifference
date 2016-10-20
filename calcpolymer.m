@@ -28,8 +28,6 @@ if strcmp(mode,'dp')
         if j == 1
             polymer(j) = sum(diag(input));
         else
-%             input(j-1,:)
-%             diag(input,1-j)
             polymer(j) = polymer(j-1) - sum(input(j-1,:)) + sum(diag(input,1-j));
         end 
     end

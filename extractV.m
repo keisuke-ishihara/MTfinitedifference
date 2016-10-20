@@ -27,6 +27,8 @@ for i = 1:length(t)
     pnow = p(:,i);
     
     [Y, I] = max(pnow);
+
+% this was used for plus end stim.    
     if carry~= -1
         pnow(1:I) = Y*ones(1,I);
     end
@@ -40,35 +42,33 @@ for i = 1:length(t)
     elseif carry ==1
         hm = ratio*1;
     end
-    
-%     hm = ratio*max(pnow);
-%     [M Imax] = max(pnow);
-%     pnow(1:Imax) = zeros(1,Imax);
-    
-%     if carry > 1
-% %         hm = ratio*max(pnow);
-%         hm = ratio*0.25;
-%     elseif carry == 1
-% %         hm = ratio*max([max(pnow), 1]);
-%         hm = ratio;
-%     elseif carry >= 0
-%         hm = ratio*carry;
-% %         pnow(pnow>carry) = carry*ones(1,sum(pnow>carry));
-% %         hm = ratio*max(pnow);
-%     else
-%         hm = ratio*0.09;
-% %         hm = ratio*max([max(pnow), 1]);
-%     end
 
-%     [M I] = min(abs(smooth(pnow-hm)));
     [M I] = min(abs(pnow-hm));
+    
+    if I > 5
+        [Y, I] = max(pnow);
+    end
+    
+%     pos = [pos x(I)];
+%     val = [val pnow(I)];    
+    
+    % this was used for polymer stim.    
+
+%     if I < 5
+%         hm = ratio*carry;
+%         [M I] = min(abs(pnow-hm));
+%     end
+    
     pos = [pos x(I)];
     val = [val pnow(I)];    
-   
+  
 end
 
-PS = polyfit(t(end-20:end),pos(end-20:end),1);
-% PS = polyfit(t(end-5:end),pos(end-5:end),1);
+% plot(pos)
+% stop
+
+PS = polyfit(t(end-10:end),pos(end-10:end),1);
+% PS = polyfit(t(end-40:end-20),pos(end-40:end-20),1);
 velocity = PS(1);
 
 % figure(5); hold on;

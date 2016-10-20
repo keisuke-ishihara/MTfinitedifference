@@ -28,6 +28,7 @@ m = length(x);
 
 a1 = v1*dt/dx; a2 = fix(a1); [a1 a2]
 b1 = v2*dt/dx; b2 = fix(b1); [b1 b2]
+
 a = a2; b = b2;
 
 % pflux = zeros(m,1);
@@ -75,10 +76,9 @@ for j = 2:n
         if dim ==1 
         
             % calculate the total polymer for each spatial bin
-            polymer = calcpolymer(p+q,'dp')/dx;
-            polymercap = 30;    
-            nuc = r*polymer.*(1-polymer/polymercap)*dt;
-%             nuc = r*polymer.*(1-polymer/polymercap)*dt.*(polymer>1e-6);
+            polymer = calcpolymer(p+q,'dp')*dx;
+            polymercap = 30;
+            nuc = r*polymer.*(1-polymer/dx/polymercap)*dt;
             nuc(nuc(:)<0) = 0;
             
         else

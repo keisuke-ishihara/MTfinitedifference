@@ -1,6 +1,6 @@
 clear all;
 
-dirname = '20161010_VJ_test3_rpoint1_dt08';
+dirname = '20161015_VJ_vg30vs15_test3_rpoint07';
 old = pwd();
 
 cd experimentsPDE
@@ -15,15 +15,16 @@ cd(dirname);
 % variation = [-15 -8.5 -5 0 5 10 16 23];
 % variation = [-40 -27 -14 -8 0 8 16 23];
 variation = [-28 -21 -13 -8.8 -4.5 0 8 16 23];
-variation = [-28:3:26];
-variation = [-28:2:2];
+% variation = [-15:1.5:9 12 15 18 21];
+variation = [-14.6 -12 -9.4 -6.8];
+variation = [-15:2.6:0.6 5.6:7:25];
 
 for i = 1:length(variation)
    
     global v1 v2 fcat fres r
-    v1   = 30;   v2   = 30; 
+    v1   = 30;   v2   = 15; 
     fcat = 3;
-    r = 0.1;
+    r = 0.07;
     
     if variation(i) == -v2
         fres = 0;
@@ -38,11 +39,11 @@ for i = 1:length(variation)
     cd(dirname);
     
     global tmax xmax dtfactor dim;
-    dtfactor = 0.08;
+    dtfactor = 0.1;
     dim = 1;
     
     nucmode = 2;
-    tmax = 28*3; xmax = 850*3;
+    tmax = 26*3; xmax = 700*3;
 
     save(strcat('param',num2str(i),'.mat'));
 

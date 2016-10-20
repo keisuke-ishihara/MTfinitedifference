@@ -1,4 +1,6 @@
-function [rs v_sims] = plotVr_PDEsim(datapath1,sims)
+function [] = plotVr_PDEsim(datapath1,sims)
+
+% function [rs v_sims]
 
 % datapath1 ='20160204_9/'; sims = 1:9;
 % datapath1 ='20160205_2/'; sims = [1, 3:9];
@@ -22,7 +24,11 @@ datapath1 ='20161003_Vr_vgvs30_test_bounded/'; sims = 1:15;
 datapath1 ='20161004_Vr_vgvs30_test2_bounded/'; sims = 1:14;
 datapath1 ='20161004_Vr_vgvs30_test6_bounded/'; sims = 1:12;
 
-datapath1 ='20161011_Vr_vgvs30_test3_bounded/'; sims = 1:15;
+datapath1 ='20161012_Vr_vg30vs15_test3/'; sims = 1:9;
+datapath1 ='20161012_Vr_vg30vs15_test5/'; sims = 1:15;  
+datapath1 ='20161013_Vr_vg30vs15frespoin3_test3/'; sims = 1:12;
+% datapath1 ='20161013_Vr_vg30vs15frespoint3_test5/'; sims = 1:12;
+datapath1 ='polymerVr_vg30vs15frespoint3_best/'; sims = 1:12;
 
 
 datapathVr = strcat('~/Documents/simudataKorolevgroup/simudataPDE/',datapath1);
@@ -39,6 +45,7 @@ for i = 1:length(sims)
     
     filename = strcat(datapathVr, 'param', num2str(sims(i)), '_out/PDEresult.mat');
     load(filename);
+    [v1 v2 fcat fres r]
     
     [a1, a2, a3, a4] = theoreticalnewpole(v1,v2,fcat,fres,r);
     n = 1;
@@ -74,15 +81,14 @@ for i = 1:length(sims)
 %         pnow(pnow>carry) = carry*ones(1,sum(pnow>carry));
 %     end
     
-    figure; hold on;
-    plot(x,sumgrw(:,90)/(x(end)-x(end-1)));
-    plot(x,sumgrw(:,80)/(x(end)-x(end-1)));
-    plot(x,sumgrw(:,70)/(x(end)-x(end-1)));  
-
-    plot(x,sumgrw(:,40)/(x(end)-x(end-1)));
-    plot(x,sumgrw(:,30)/(x(end)-x(end-1)));
-    plot(x,sumgrw(:,20)/(x(end)-x(end-1)));  
-
+    figure(51); hold on;
+    plot(x,sumgrw(:,[80 90])/(x(end)-x(end-1)), '.');
+    tpoints([80 90])
+%     plot(x,sumgrw(:,70)/(x(end)-x(end-1)));  
+% 
+%     plot(x,sumgrw(:,40)/(x(end)-x(end-1)));
+%     plot(x,sumgrw(:,30)/(x(end)-x(end-1)));
+%     plot(x,sumgrw(:,20)/(x(end)-x(end-1)));  
     
 %     figure(100); hold on;
 %     plot(log10(ratios), vs, 'b');
@@ -91,7 +97,7 @@ for i = 1:length(sims)
 %     [r mean(vs) std(vs) std(vs)/mean(vs)];
 %     v_theors = [v_theors a2];
     
-    figure(101); hold on;
+    figure(102); hold on;
     plot(r, mean(vs), 'ko')
         
     v_sims = [v_sims mean(vs)];
@@ -102,12 +108,13 @@ for i = 1:length(sims)
 end
 
 % critical rate
-p_c = (v2*fcat-v1*fres)^2/(v2*v1*(v2+v1));
+p_c = (v2*fcat-v1*fres)^2/(v2*v1*(v2+v1))
 
 % ballistic rate
-p_b = (v2*fcat-v1*fres)/v2/v1*fcat;
+p_b = (v2*fcat-v1*fres)/v2/v1*fcat
+stop
 
-figure(101); hold on;
+figure(102); hold on;
 plot(p_c, 0, 'r*', p_b, 0, 'b*')
 xlabel('nucleation r'); ylabel('aster velocity V')
 

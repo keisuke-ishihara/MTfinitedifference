@@ -16,9 +16,9 @@ n_chomp = 5;  % n_store > 2*n_chomp recommended?
 
 initpoprange = 10;
 hardcoderate = 3;
-
+max([r fcat fres hardcoderate])
 dt = dtfactor/max([r fcat fres hardcoderate]); % discretization of time
-dt = single(dt);
+dt = single(dt)
 % making this smaller has a great effect on the accuracy of the simulation
 
 dx = gcd(v1,v2)*dt;

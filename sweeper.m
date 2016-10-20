@@ -4,17 +4,17 @@ beep off;
 % close(figure(1));
 
 v1   = 30; % polymerization
-v2   = 40; % depolymerization
+v2   = 15; % depolymerization
 fcat = 3; % catastrophe
-fres = 1; % rescue
-rs = [0.03 0.15];
-% rs = [1 2.5];
+fres = 0.5; % rescue
+% rs = [0.02 0.06 0.12 0.24 0.30 0.34];
+rs = [1 2.5];
 
 % v1   = 30; % polymerization
-% v2   = 15; % depolymerization
+% v2   = 40; % depolymerization
 % fcat = 3; % catastrophe
 % fres = 1; % rescue
-% rs = [2.5];
+% rs = [0.07 0.18];
 
 rcnew = fcat-v1/v2*fres;
 
@@ -36,6 +36,7 @@ for i = 1:length(rs)
     
     p_c = (v2*fcat-v1*fres)^2/(v2*v1*(v2+v1))
     p_b = (v2*fcat-v1*fres)/v2/v1*fcat
+    p_c/p_b
 
     [r_c, v_theor, J] = theoreticalnewpole(v1,v2,fcat,fres,r);
     [x, tpoints, sump, p, q] = sim_plusminus(v1,v2,fcat,fres,r,dim,nucmode);
@@ -55,14 +56,14 @@ for i = 1:length(rs)
     
     dx = x(2)-x(1);
 
-    figure('Position', [1400, 800, 350, 250]); hold on;
+    FigHandle = figure('Position', [1400, 800, 350, 250]); hold on;
     [v1,v2,fcat,fres,r]
 
     if dim == 1
         
         xindex = 1;
        
-        toplot = sump(:,(1:4:81))/dx;
+        toplot = sump(:,(1:8:81))/dx;
         [grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 1+min(size(toplot)));
     
         % plot initial condition
@@ -100,6 +101,11 @@ for i = 1:length(rs)
 %         plot(x, toplot(:,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
         plot(x(xindex:end), toplot(xindex:end,imat), 'Color', grad(imat+1,:), 'linewidth',1.2);
     end
+    ax = gca;
+    ax.YTick = []; ax.XTick = [0:100:500];
+    ax.FontSize = 24;
+    filename2 = strcat('vg',num2str(v1),'vs',num2str(v2),'_p',num2str(r),'.eps');
+    saveas(FigHandle,filename2,'epsc2')
     
 %     figure; plot(calcpolymer(p+q,'dp'))
     
